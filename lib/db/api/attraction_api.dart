@@ -74,8 +74,8 @@ class AttractionApi {
         });
       });
       return itemsList;
-    } catch (Exception) {
-      print(Exception.toString());
+    } catch (e) {
+      print(e.toString());
       return null;
     }
   }

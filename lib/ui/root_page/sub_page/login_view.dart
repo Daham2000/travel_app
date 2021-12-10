@@ -7,9 +7,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:travel_app/ui/home_page/home_provider.dart';
+import 'package:travel_app/ui/intro_page/intro_view.dart';
 import 'package:travel_app/ui/root_page/widget/input_decoration.dart';
 import 'package:travel_app/utill/image_assets.dart';
+import 'package:travel_app/utill/transitions.dart';
 
 import '../root_bloc.dart';
 import '../root_event.dart';
@@ -171,10 +172,9 @@ class _LoginViewState extends State<LoginView> {
             pre.isLoginSuccess != current.isLoginSuccess,
         builder: (context, state) {
           if (state.isLoginSuccess == true) {
-            print("Navigating to Home page...");
             Future.microtask(
               () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomeProvider())),
+                  SlideRightRoute(page: IntroView())),
             );
           }
           if (state.error.length > 1) {
