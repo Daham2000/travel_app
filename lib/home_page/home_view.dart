@@ -7,6 +7,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import 'home_bloc.dart';
@@ -26,10 +27,12 @@ class _HomeViewState extends State<HomeView> {
   HomeBloc homeBloc;
   final searchController = TextEditingController();
   ScrollController listController = ScrollController();
+  String version;
 
   @override
   void initState() {
     super.initState();
+    getAppVersion();
     homeBloc = BlocProvider.of<HomeBloc>(context);
     listController.addListener(_scrollListener);
   }
@@ -39,6 +42,11 @@ class _HomeViewState extends State<HomeView> {
         !listController.position.outOfRange) {
       homeBloc.add(GetDataAttractionEvent());
     }
+  }
+
+  Future<void> getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
   }
 
   @override
@@ -63,7 +71,7 @@ class _HomeViewState extends State<HomeView> {
               elevation: 0,
               iconTheme: IconThemeData(color: Colors.black),
             ),
-            drawer: DrawerHome(),
+            drawer: DrawerHome(version: version,),
             body: Stack(
               children: [
                 if (state.attractionList != null)
