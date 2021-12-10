@@ -16,4 +16,6 @@ class ImageAssets{
   static final String aboutIcon = "assets/icons/about.svg";
   static final String settingsIcon = "assets/icons/settings.svg";
 
+  //Demo images
+  static final String demoProPic = "assets/img/demoProPic.png";
 }

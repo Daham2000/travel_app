@@ -7,8 +7,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:travel_app/home_page/home_provider.dart';
-import 'package:travel_app/root_page/widget/input_decoration.dart';
+import 'package:travel_app/ui/home_page/home_provider.dart';
+import 'package:travel_app/ui/root_page/widget/input_decoration.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import '../root_bloc.dart';
