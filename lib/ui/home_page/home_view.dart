@@ -7,13 +7,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import 'home_bloc.dart';
 import 'home_event.dart';
 import 'home_state.dart';
-import 'widget/app_bar_widget.dart';
 import 'widget/drawer.dart';
 import 'widget/travel_cart.dart';
 
@@ -61,17 +61,126 @@ class _HomeViewState extends State<HomeView> {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: Colors.white,
-            appBar: AppBar(
-              flexibleSpace: AppBarWidget(),
-              title: Container(
-                width: 50,
-                child: Image.asset(ImageAssets.logoPath),
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(150.0),
+              child: AppBar(
+                elevation: 0,
+                flexibleSpace: Image(
+                  image: AssetImage(ImageAssets.appBarImage),
+                  fit: BoxFit.cover,
+                ),
+                actions: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: SvgPicture.asset(
+                          ImageAssets.travelIcon,
+                          color: Colors.white,
+                          width: 24.0,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0, top: 0.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Discover",
+                              style: TextStyle(
+                                fontSize: 26.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Container(
+                              width: 80.0,
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                text: TextSpan(
+                                  text: "World's top travel places",
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                ],
+                backgroundColor: Colors.transparent,
+                iconTheme: IconThemeData(color: Colors.white),
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(20.0),
+                  // here the desired height
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 20),
+                    child: TextField(
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: "Avenir LT Std",
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black),
+                        prefixIcon: state.searchList.isNotEmpty == true
+                            ? Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 2.0, top: 5, bottom: 5, left: 2),
+                                child: InkWell(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    searchController.clear();
+                                    homeBloc.add(ClearSearchResult());
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 2.0, top: 5, bottom: 5, left: 2),
+                                child: Icon(
+                                  Icons.search,
+                                  color: Colors.black,
+                                ),
+                              ),
+                        hintText: "Search",
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                        border: new OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: new BorderSide(color: Colors.grey)),
+                      ),
+                      onChanged: (query) {
+                        homeBloc.searchAttraction(query);
+                      },
+                    ),
+                  ),
+                ),
               ),
-              centerTitle: true,
-              elevation: 0,
-              iconTheme: IconThemeData(color: Colors.black),
             ),
-            drawer: DrawerHome(version: version,),
+            drawer: DrawerHome(
+              version: version,
+            ),
             body: Stack(
               children: [
                 if (state.attractionList != null)
@@ -80,50 +189,20 @@ class _HomeViewState extends State<HomeView> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 5),
-                        child: TextField(
-                          controller: searchController,
-                          decoration: InputDecoration(
-                            hintStyle: TextStyle(
-                                fontSize: 14,
-                                fontFamily: "Avenir LT Std",
-                                fontWeight: FontWeight.w300,
-                                color: Colors.black),
-                            suffixIcon: state.searchList.isNotEmpty == true
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 2.0, top: 5, bottom: 5, left: 2),
-                                    child: InkWell(
-                                      onTap: () {
-                                        FocusScope.of(context).unfocus();
-                                        searchController.clear();
-                                        homeBloc.add(ClearSearchResult());
-                                      },
-                                      child: Icon(
-                                        Icons.close,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 2.0, top: 5, bottom: 5, left: 2),
-                                    child: Icon(
-                                      Icons.search,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                            hintText: "Search for attractions",
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 15),
-                            border: new OutlineInputBorder(
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(10.0)),
-                                borderSide: new BorderSide(color: Colors.grey)),
-                          ),
-                          onChanged: (query) {
-                            homeBloc.searchAttraction(query);
-                          },
+                          horizontal: 19,
+                          vertical: 10.0
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Popular places",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.0,
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       state.isSearching

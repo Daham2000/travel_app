@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:travel_app/ui/home_page/home_provider.dart';
 import 'package:travel_app/ui/intro_page/intro_view.dart';
 import 'package:travel_app/ui/root_page/widget/input_decoration.dart';
 import 'package:travel_app/utill/image_assets.dart';
@@ -169,11 +170,18 @@ class _LoginViewState extends State<LoginView> {
         buildWhen: (pre, current) =>
             pre.error != current.error ||
             pre.isLoading != current.isLoading ||
+            pre.isRegSuccess != current.isRegSuccess ||
             pre.isLoginSuccess != current.isLoginSuccess,
         builder: (context, state) {
           if (state.isLoginSuccess == true) {
             Future.microtask(
               () => Navigator.pushReplacement(context,
+                  SlideRightRoute(page: HomeProvider())),
+            );
+          }
+          if (state.isRegSuccess == true) {
+            Future.microtask(
+                  () => Navigator.pushReplacement(context,
                   SlideRightRoute(page: IntroView())),
             );
           }
@@ -397,7 +405,7 @@ class _LoginViewState extends State<LoginView> {
                                                     .withOpacity(0.7))),
                                       ),
                                       child: Text(
-                                        'Sign in',
+                                        'Sign up',
                                         style: TextStyle(
                                             color: Colors.blueAccent,
                                             fontSize: 18.0,

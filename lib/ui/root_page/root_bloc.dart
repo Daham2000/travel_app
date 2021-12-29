@@ -38,7 +38,7 @@ class RootBloc extends Bloc<RootEvent, RootState> {
           password: data.password,
         );
         if (response.user.email != null) {
-          yield state.clone(isLoginSuccess: true, isLoading: false);
+          yield state.clone(isRegSuccess: true, isLoading: false);
         } else {
           yield state.clone(
             isLoginSuccess: false,

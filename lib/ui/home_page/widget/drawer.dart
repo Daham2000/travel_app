@@ -15,6 +15,7 @@ import '../home_provider.dart';
 
 class DrawerHome extends StatelessWidget {
   final String version;
+  final double gap = 20;
 
   const DrawerHome({Key key, this.version});
 
@@ -95,7 +96,7 @@ class DrawerHome extends StatelessWidget {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 13),
+                      padding: const EdgeInsets.only(left: 15,bottom: 16),
                       child: Row(
                         children: [
                           Icon(
@@ -116,7 +117,7 @@ class DrawerHome extends StatelessWidget {
                   InkWell(
                     onTap: () {},
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 13),
+                      padding: const EdgeInsets.only(left: 15,bottom: 16),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -137,7 +138,7 @@ class DrawerHome extends StatelessWidget {
                   InkWell(
                     onTap: () {},
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 13),
+                      padding: const EdgeInsets.only(left: 15,bottom: 16),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -158,7 +159,7 @@ class DrawerHome extends StatelessWidget {
                   InkWell(
                     onTap: () {},
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 13),
+                      padding: const EdgeInsets.only(left: 15,bottom: 16),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -188,7 +189,7 @@ class DrawerHome extends StatelessWidget {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 13),
+                      padding: const EdgeInsets.only(left: 15,bottom: 16),
                       child: Row(
                         children: [
                           SvgPicture.asset(
