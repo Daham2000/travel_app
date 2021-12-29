@@ -20,4 +20,5 @@ class StyledColor {
   static const AVAILABLE_QTY_COLOR = const Color(0xFFBBD7FB);
   static const LIGHT_GRAY_COLOR = const Color(0xFFF4F4F4);
   static const TEXT_FIELD_LABEL_COLOR = const Color(0xFF717B87);
+  static const GREEN_BTN = const Color(0xFF06BF93);
 }

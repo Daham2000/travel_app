@@ -5,8 +5,12 @@
  */
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:themed/themed.dart';
+import 'package:travel_app/utill/image_assets.dart';
 import 'package:travel_app/utill/styled_colors.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -43,6 +47,7 @@ class _SinglePostState extends State<SinglePost> {
   void dispose() {
     super.dispose();
   }
+  CarouselController buttonCarouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,33 +57,54 @@ class _SinglePostState extends State<SinglePost> {
       child: Material(
         color: Colors.transparent,
         child: Scaffold(
-          appBar: AppBar(
-            flexibleSpace: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    StyledColor.BACKGROUND_COLOR_ONE,
-                    StyledColor.BACKGROUND_COLOR_ONE
-                  ],
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(190.0),
+            child: AppBar(
+              backgroundColor: Colors.white,
+              flexibleSpace: ChangeColors(
+              hue: 0.0001,
+              brightness: -0.2,
+              saturation: 0.0001,
+              child: CachedNetworkImage(
+                imageUrl: widget.travelCart.img,
+                fit: BoxFit.fill,),
+            ),
+              elevation: 10,
+              centerTitle: true,
+              title: Text(
+                "Trip information",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500
                 ),
               ),
-            ),
-            elevation: 0,
-            title: Text(
-              widget.travelCart.title,
-              style: TextStyle(
-                color: Colors.blueAccent,
+              leading: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            leading: InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(25.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15, vertical: 20),
+                  child: Row(
+                    children: [
+                      Text(
+                        widget.travelCart.title,
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 19.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -89,32 +115,9 @@ class _SinglePostState extends State<SinglePost> {
                   Container(
                     color: Colors.white,
                     child: Padding(
-                      padding: const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.all(15.0),
                       child: ListView(
                         children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 240,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.travelCart.img,
-                              placeholder: (context, url) =>
-                                  CupertinoActivityIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            child: Text(
-                              widget.travelCart.title,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
                           SizedBox(
                             height: 4.0,
                           ),
@@ -123,7 +126,7 @@ class _SinglePostState extends State<SinglePost> {
                             child: Text(
                               "District: " + widget.travelCart.district,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: GoogleFonts.rubik(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.black,
@@ -139,7 +142,7 @@ class _SinglePostState extends State<SinglePost> {
                               widget.travelCart.description,
                               maxLines: 100,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: GoogleFonts.rubik(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.black,
@@ -149,6 +152,55 @@ class _SinglePostState extends State<SinglePost> {
                           SizedBox(
                             height: 15,
                           ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: StyledColor.ADD_ICON_COLOR,
+                                elevation: 1.0,
+                              ),
+                              onPressed: (){
+                                showDialog(context: context, builder: (BuildContext context){
+                                  return AlertDialog(
+                                    title: Text("This page is under developing"),
+                                  );
+                                });
+                              },
+                              child: Text(
+                                "Add to a trip plan",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: StyledColor.GREEN_BTN,
+                                elevation: 1.0,
+                              ),
+                              onPressed: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LocationView(
+                                          latLng: widget.travelCart.latLng,
+                                        )));
+                              },
+                              child: Text(
+                                "Click to view location on map",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
                           YoutubePlayerIFrame(
                             controller: _controller,
                             aspectRatio: 16 / 9,
@@ -156,29 +208,6 @@ class _SinglePostState extends State<SinglePost> {
                           SizedBox(
                             height: 15,
                           ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LocationView(
-                                            latLng: widget.travelCart.latLng,
-                                          )));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text(
-                                  "Click to view location on map",
-                                  style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),

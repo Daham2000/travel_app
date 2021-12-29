@@ -115,7 +115,13 @@ class DrawerHome extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(context: context, builder: (BuildContext context){
+                        return AlertDialog(
+                          title: Text("This page is under developing"),
+                        );
+                      });
+                    },
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15,bottom: 16),
                       child: Row(
@@ -136,7 +142,13 @@ class DrawerHome extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(context: context, builder: (BuildContext context){
+                        return AlertDialog(
+                          title: Text("This page is under developing"),
+                        );
+                      });
+                    },
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15,bottom: 16),
                       child: Row(
@@ -157,7 +169,13 @@ class DrawerHome extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(context: context, builder: (BuildContext context){
+                        return AlertDialog(
+                          title: Text("This page is under developing"),
+                        );
+                      });
+                    },
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15,bottom: 16),
                       child: Row(
