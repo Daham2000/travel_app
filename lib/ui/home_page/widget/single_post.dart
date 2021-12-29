@@ -177,19 +177,24 @@ class _SinglePostState extends State<SinglePost> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 primary: StyledColor.GREEN_BTN,
                                 elevation: 1.0,
                               ),
                               onPressed: (){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LocationView(
-                                          latLng: widget.travelCart.latLng,
-                                        )));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => LocationView(
+                                //           latLng: widget.travelCart.latLng,
+                                //         )));
+                                showDialog(context: context, builder: (BuildContext context){
+                                  return AlertDialog(
+                                    title: Text("This page is under developing"),
+                                  );
+                                });
                               },
                               child: Text(
                                 "Click to view location on map",
@@ -200,6 +205,9 @@ class _SinglePostState extends State<SinglePost> {
                                 ),
                               ),
                             ),
+                          ),
+                          SizedBox(
+                            height: 5,
                           ),
                           YoutubePlayerIFrame(
                             controller: _controller,

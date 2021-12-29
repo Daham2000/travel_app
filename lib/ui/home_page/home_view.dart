@@ -214,12 +214,25 @@ class _HomeViewState extends State<HomeView> {
                         TravelCart(
                           title: e.title,
                           img: e.image,
+                          isAd:false,
                           description: e.description,
                           shortDetails: e.shortDetail,
                           youtubeID: e.youtubeID,
                           district: e.district,
                           latLng: e.latLng,
-                        )
+                        ),
+                      TravelCart(
+                        title: "Sugar Loft Apartments",
+                        img: "https://t-cf.bstatic.com/xdata/images/hotel/square6"
+                            "00/148192947.webp?k=63d198052ffa3f9ec937a40e65e6348be9"
+                            "117b04f2c559ef7dab851af4aac32f&o=&s=1",
+                        isAd:true,
+                        description: "",
+                        shortDetails: "",
+                        youtubeID: "",
+                        district: "Rio de Janeiro",
+                        latLng: [],
+                      )
                     ],
                   )
                 else
