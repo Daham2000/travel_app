@@ -18,46 +18,41 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void searchAttraction(String query) async {
-    List<Attraction> resultant = [];
-    add(LoadingEvent(true));
-    resultant = await AttractionApi().searchAttraction(query);
-    if (resultant == null) {
-      print('Unable to retrieve data (Searching)');
-    } else {
-      add(SearchDocument(resultant));
-    }
-    add(LoadingEvent(false));
+    // List<Attraction> resultant = [];
+    // add(LoadingEvent(true));
+    // resultant = await AttractionApi().searchAttraction(query);
+    // if (resultant == null) {
+    //   print('Unable to retrieve data (Searching)');
+    // } else {
+    //   add(SearchDocument(resultant));
+    // }
+    // add(LoadingEvent(false));
   }
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
     switch (event.runtimeType) {
       case GetDataAttractionEvent:
-        List<Attraction> resultant = state.attractionList;
-        AttractionModel attractionModel = await AttractionApi().getUsersList(
-          list: state.attractionList,
-          documentSnapshot: state.documentSnapshot,
-        );
-        if (state.attractionList.isNotEmpty) {
-          for (final i in attractionModel.list) {
-            resultant.add(i);
-          }
-        } else {
-          resultant = attractionModel.list;
+        List<Post> postList = state.attractionList.posts;
+        Attraction resultant = state.attractionList;
+        Attraction attractionModel = await
+          AttractionApi().getAll(state.page, "", state.limit);
+        for (final post in attractionModel.posts){
+          postList.add(post);
         }
-        if (resultant == null) {
-          print('Unable to retrieve data');
-        } else {
-          yield state.clone(
-            attractionList: resultant,
-            documentSnapshot: attractionModel.documentSnapshot,
-          );
+        resultant.posts = postList;
+        if(attractionModel.posts.length<state.limit){
+          yield state.clone(moreSearching: false,attractionList: resultant,isUpdated:true);
+        }else{
+          yield state.clone(moreSearching: true,attractionList: resultant,
+              page: state.page+1,isUpdated:true);
         }
+        yield state.clone(isUpdated:false);
         break;
 
       case SearchDocument:
         final data = event as SearchDocument;
-        yield state.clone(searchList: data.searchingList);
+        // yield state.clone(searchList: data.searchingList);
         break;
 
       case LoadingEvent:
@@ -66,7 +61,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         break;
 
       case ClearSearchResult:
-        yield state.clone(searchList: []);
+        yield state.clone(searchList: null);
         break;
     }
   }

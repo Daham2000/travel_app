@@ -1,36 +1,65 @@
-/*
- * Copyright (c) FutureSoft 2021
- * Author: Daham
- *
- */
+// To parse this JSON data, do
+//
+//     final attraction = attractionFromJson(jsonString);
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+
+Attraction attractionFromJson(String str) => Attraction.fromJson(json.decode(str));
+
+String attractionToJson(Attraction data) => json.encode(data.toJson());
 
 class Attraction {
-  String title;
-  String image;
-  String shortDetail;
-  String description;
-  String youtubeID;
-  String district;
-  List<dynamic> latLng;
+  Attraction({
+    this.posts,
+  });
 
-  Attraction({this.latLng,this.title, this.image, this.shortDetail, this.description,this.youtubeID,this.district});
+  List<Post> posts;
 
-  Attraction.fromMap(Map<String, dynamic> data) {
-    title = data['Title'];
-    image = data['Image'];
-    shortDetail = data['Short Detail'];
-    description = data['Description'];
-    youtubeID = data['youtubeID'];
-    district = data['District'];
-    latLng = data['LatLng'];
-  }
+  factory Attraction.fromJson(Map<String, dynamic> json) => Attraction(
+    posts: List<Post>.from(json["posts"].map((x) => Post.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "posts": List<dynamic>.from(posts.map((x) => x.toJson())),
+  };
 }
 
-class AttractionModel{
-  final List<Attraction> list;
-  final DocumentSnapshot documentSnapshot;
+class Post {
+  Post({
+    this.description,
+    this.district,
+    this.images,
+    this.latLng,
+    this.shortDetail,
+    this.title,
+    this.youtubeId,
+  });
 
-  AttractionModel(this.list, this.documentSnapshot);
+  String description;
+  String district;
+  List<String> images;
+  List<String> latLng;
+  String shortDetail;
+  String title;
+  String youtubeId;
+
+  factory Post.fromJson(Map<String, dynamic> json) => Post(
+    description: json["Description"],
+    district: json["District"],
+    images: List<String>.from(json["Images"].map((x) => x)),
+    latLng: List<String>.from(json["LatLng"].map((x) => x)),
+    shortDetail: json["ShortDetail"],
+    title: json["Title"],
+    youtubeId: json["youtubeID"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "Description": description,
+    "District": district,
+    "Images": List<dynamic>.from(images.map((x) => x)),
+    "LatLng": List<dynamic>.from(latLng.map((x) => x)),
+    "ShortDetail": shortDetail,
+    "Title": title,
+    "youtubeID": youtubeId,
+  };
 }

@@ -4,79 +4,48 @@
  *
  */
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:travel_app/db/constants/url.dart';
 import 'package:travel_app/db/model/attraction.dart';
 
 class AttractionApi {
-  final CollectionReference attractionList =
-      FirebaseFirestore.instance.collection('attraction');
-  DocumentSnapshot documentSnapshot;
+  static AttractionApi categoryAPI;
+  Response response;
+  final dio = Dio();
 
-  Future<AttractionModel> getUsersList(
-      {List<Attraction> list, DocumentSnapshot documentSnapshot}) async {
-    List<Attraction> itemsList = [];
-    AttractionModel attractionModel;
-    try {
-      if (list.isNotEmpty) {
-        await attractionList
-            .startAfterDocument(documentSnapshot)
-            .limit(5)
-            .get()
-            .then((querySnapshot) {
-          querySnapshot.docs.forEach((snapShot) {
-            this.documentSnapshot = snapShot;
-            itemsList.add(Attraction.fromMap(snapShot.data()));
-          });
-        });
-      } else {
-        await attractionList.limit(5).get().then((querySnapshot) {
-          querySnapshot.docs.forEach((snapShot) {
-            this.documentSnapshot = snapShot;
-            itemsList.add(Attraction.fromMap(snapShot.data()));
-          });
-        });
-      }
-      attractionModel = new AttractionModel(itemsList, this.documentSnapshot);
-      return attractionModel;
-    } catch (e) {
-      print("Firebase:-  " + e.toString());
-      return null;
+  factory AttractionApi() {
+    if (categoryAPI == null) {
+      categoryAPI = AttractionApi._internal();
     }
+    return categoryAPI;
   }
 
-  Future searchAttraction(String query) async {
-    List<Attraction> itemsList = [];
+  AttractionApi._internal();
+
+  Future<Attraction> getAll(int page,String query,int limit) async {
+
+    final queryParameter = {
+      "page": "${page.toString()}",
+      "query": query,
+      "limit": "${limit.toString()}",
+    };
+    Attraction attractionModel;
+
     try {
-      await attractionList
-          .where(
-            "Title",
-            isGreaterThanOrEqualTo:
-                '${query[0].toUpperCase()}${query.substring(1)}',
-          )
-          .get()
-          .then((querySnapshot) {
-        querySnapshot.docs.forEach((snapShot) {
-          itemsList.add(Attraction.fromMap(snapShot.data()));
-          print("searchAttraction:-  ${itemsList[0].title}");
-        });
-      });
-      await attractionList
-          .where(
-            "District",
-            isGreaterThanOrEqualTo:
-                '${query[0].toUpperCase()}${query.substring(1)}',
-          )
-          .get()
-          .then((querySnapshot) {
-        querySnapshot.docs.forEach((snapShot) {
-          itemsList.add(Attraction.fromMap(snapShot.data()));
-          print("searchAttraction:-  ${itemsList[0].title}");
-        });
-      });
-      return itemsList;
+      response = await dio.get(UrlConstants.ALL_POSTS,
+          queryParameters: queryParameter);
+      if (response.statusCode == 200) {
+        final jsonString = response.data;
+        attractionModel = Attraction.fromJson(jsonString);
+        return attractionModel;
+      }
     } catch (e) {
       print(e.toString());
-      return null;
+      return attractionModel;
     }
+    return attractionModel;
   }
+
 }

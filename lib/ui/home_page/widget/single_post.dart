@@ -53,7 +53,7 @@ class _SinglePostState extends State<SinglePost> {
   Widget build(BuildContext context) {
     FocusScope.of(context).unfocus();
     return Hero(
-      tag: widget.travelCart.img + widget.travelCart.title,
+      tag: widget.travelCart.title,
       child: Material(
         color: Colors.transparent,
         child: Scaffold(

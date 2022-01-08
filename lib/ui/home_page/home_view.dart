@@ -54,9 +54,9 @@ class _HomeViewState extends State<HomeView> {
     return BlocBuilder<HomeBloc, HomeState>(
         buildWhen: (pre, current) =>
             pre.error != current.error ||
+            pre.moreSearching != current.moreSearching ||
             pre.isSearching != current.isSearching ||
-            pre.attractionList != current.attractionList ||
-            pre.documentSnapshot != current.documentSnapshot ||
+            pre.isUpdated != current.isUpdated ||
             pre.searchList != current.searchList,
         builder: (context, state) {
           return Scaffold(
@@ -138,7 +138,7 @@ class _HomeViewState extends State<HomeView> {
                             fontFamily: "Avenir LT Std",
                             fontWeight: FontWeight.w300,
                             color: Colors.black),
-                        prefixIcon: state.searchList.isNotEmpty == true
+                        prefixIcon: state.searchList.posts.isNotEmpty == true
                             ? Padding(
                                 padding: const EdgeInsets.only(
                                     right: 2.0, top: 5, bottom: 5, left: 2),
@@ -208,16 +208,16 @@ class _HomeViewState extends State<HomeView> {
                       state.isSearching
                           ? Center(child: CupertinoActivityIndicator())
                           : Container(),
-                      for (final e in state.searchList.length > 0
-                          ? state.searchList
-                          : state.attractionList)
+                      for (final e in state.searchList.posts.length > 0
+                          ? state.searchList.posts
+                          : state.attractionList.posts)
                         TravelCart(
                           title: e.title,
-                          img: e.image,
+                          img: e.images[0],
                           isAd:false,
                           description: e.description,
                           shortDetails: e.shortDetail,
-                          youtubeID: e.youtubeID,
+                          youtubeID: e.youtubeId,
                           district: e.district,
                           latLng: e.latLng,
                         ),

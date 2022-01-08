@@ -4,18 +4,20 @@
  *
  */
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:travel_app/db/model/attraction.dart';
 
 @immutable
 class HomeState {
   final String error;
-  final List<Attraction> attractionList;
-  final List<Attraction> searchList;
+  final Attraction attractionList;
+  final Attraction searchList;
   final List attractionListTwo;
   final bool isSearching;
-  final DocumentSnapshot documentSnapshot;
+  final int page;
+  final int limit;
+  final bool moreSearching;
+  final bool isUpdated;
 
   HomeState({
     this.error,
@@ -23,7 +25,10 @@ class HomeState {
     this.attractionListTwo,
     this.searchList,
     this.isSearching,
-    this.documentSnapshot,
+    this.page,
+    this.limit,
+    this.moreSearching,
+    this.isUpdated,
   });
 
   HomeState.init()
@@ -32,17 +37,23 @@ class HomeState {
           attractionList: null,
           attractionListTwo: null,
           searchList: null,
-          isSearching: null,
-          documentSnapshot: null,
+          isSearching: false,
+    isUpdated: false,
+          page: null,
+          limit: null,
+    moreSearching: null,
         );
 
   HomeState clone({
     String error,
-    DocumentSnapshot documentSnapshot,
-    List<Attraction> attractionList,
-    List<Attraction> searchList,
+    Attraction attractionList,
+    Attraction searchList,
     List attractionListTwo,
     bool isSearching,
+    bool moreSearching,
+    bool isUpdated,
+    int page,
+    int limit,
   }) {
     return HomeState(
       error: error ?? this.error,
@@ -50,16 +61,22 @@ class HomeState {
       searchList: searchList ?? this.searchList,
       attractionListTwo: attractionListTwo ?? this.attractionListTwo,
       isSearching: isSearching ?? this.isSearching,
-      documentSnapshot: documentSnapshot ?? this.documentSnapshot,
+      limit: limit ?? this.limit,
+      page: page ?? this.page,
+      isUpdated: isUpdated ?? this.isUpdated,
+      moreSearching: moreSearching ?? this.moreSearching,
     );
   }
 
   static HomeState get initialState => HomeState(
         error: null,
-        attractionList: [],
-        searchList: [],
-        documentSnapshot: null,
+        attractionList: Attraction(posts: []),
+        searchList: Attraction(posts: []),
         attractionListTwo: null,
         isSearching: false,
-      );
+    isUpdated: false,
+        page: 1,
+        limit: 10,
+        moreSearching: false,
+  );
 }

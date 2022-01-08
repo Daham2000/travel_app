@@ -61,7 +61,7 @@ class TravelCart extends StatelessWidget {
         }
       },
       child: Hero(
-        tag: img + title,
+        tag: title,
         child: Material(
           color: Colors.transparent,
           child: Padding(
