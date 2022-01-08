@@ -74,7 +74,7 @@ class HomeState {
         searchList: Attraction(posts: []),
         attractionListTwo: null,
         isSearching: false,
-    isUpdated: false,
+        isUpdated: false,
         page: 1,
         limit: 10,
         moreSearching: false,
