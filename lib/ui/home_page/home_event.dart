@@ -6,6 +6,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:travel_app/db/model/attraction.dart';
+import 'package:travel_app/db/model/hotel.dart';
 
 @immutable
 abstract class HomeEvent {}
@@ -17,9 +18,15 @@ class GetDataAttractionEvent extends HomeEvent {
 }
 
 class SearchDocument extends HomeEvent {
-  final List<Attraction> searchingList;
+  final Attraction searchingList;
 
   SearchDocument(this.searchingList);
+}
+
+class GetHotelList extends HomeEvent {
+  final HotelModel hotelModel;
+
+  GetHotelList(this.hotelModel);
 }
 
 class LoadingEvent extends HomeEvent {

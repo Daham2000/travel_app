@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final hotelModel = hotelModelFromJson(jsonString);
+
 import 'dart:convert';
 
 HotelModel hotelModelFromJson(String str) => HotelModel.fromJson(json.decode(str));
@@ -39,7 +43,7 @@ class Hotel {
   String description;
   String district;
   String link;
-  int miv;
+  double miv;
   int rate;
   String title;
 
@@ -48,7 +52,7 @@ class Hotel {
     description: json["description"],
     district: json["district"],
     link: json["link"],
-    miv: json["miv"],
+    miv: json["miv"].toDouble(),
     rate: json["rate"],
     title: json["title"],
   );

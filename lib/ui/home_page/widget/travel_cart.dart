@@ -20,12 +20,14 @@ class TravelCart extends StatelessWidget {
   final String description;
   final String youtubeID;
   final String district;
+  final String url;
   final List<dynamic> latLng;
 
   const TravelCart(
       {this.latLng,
       this.img,
       this.isAd,
+      this.url,
       this.rate,
       this.title,
       this.shortDetails,
@@ -33,10 +35,8 @@ class TravelCart extends StatelessWidget {
       this.youtubeID,
       this.district});
 
-  final String _url = 'https://flutter.dev';
-
   void _launchURL() async {
-    if (!await launch(_url)) throw 'Could not launch $_url';
+    if (!await launch(this.url)) throw 'Could not launch ${this.url}';
   }
 
   @override

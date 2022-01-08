@@ -205,6 +205,18 @@ class _HomeViewState extends State<HomeView> {
                           ],
                         ),
                       ),
+                      for (final h in state.hotelList.hotels)
+                        TravelCart(
+                          title: h.title,
+                          img: h.images[0],
+                          isAd:true,
+                          url: h.link,
+                          description: "",
+                          shortDetails: "",
+                          youtubeID: "",
+                          district:  h.district,
+                          latLng: [],
+                        ),
                       state.isSearching
                           ? Center(child: CupertinoActivityIndicator())
                           : Container(),
@@ -221,18 +233,6 @@ class _HomeViewState extends State<HomeView> {
                           district: e.district,
                           latLng: e.latLng,
                         ),
-                      TravelCart(
-                        title: "Sugar Loft Apartments",
-                        img: "https://t-cf.bstatic.com/xdata/images/hotel/square6"
-                            "00/148192947.webp?k=63d198052ffa3f9ec937a40e65e6348be9"
-                            "117b04f2c559ef7dab851af4aac32f&o=&s=1",
-                        isAd:true,
-                        description: "",
-                        shortDetails: "",
-                        youtubeID: "",
-                        district: "Rio de Janeiro",
-                        latLng: [],
-                      )
                     ],
                   )
                 else

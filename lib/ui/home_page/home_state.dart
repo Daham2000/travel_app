@@ -6,12 +6,14 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:travel_app/db/model/attraction.dart';
+import 'package:travel_app/db/model/hotel.dart';
 
 @immutable
 class HomeState {
   final String error;
   final Attraction attractionList;
   final Attraction searchList;
+  final HotelModel hotelList;
   final List attractionListTwo;
   final bool isSearching;
   final int page;
@@ -29,12 +31,14 @@ class HomeState {
     this.limit,
     this.moreSearching,
     this.isUpdated,
+    this.hotelList,
   });
 
   HomeState.init()
       : this(
           error: null,
           attractionList: null,
+    hotelList: null,
           attractionListTwo: null,
           searchList: null,
           isSearching: false,
@@ -48,6 +52,7 @@ class HomeState {
     String error,
     Attraction attractionList,
     Attraction searchList,
+    HotelModel hotelList,
     List attractionListTwo,
     bool isSearching,
     bool moreSearching,
@@ -57,6 +62,7 @@ class HomeState {
   }) {
     return HomeState(
       error: error ?? this.error,
+      hotelList: hotelList ?? this.hotelList,
       attractionList: attractionList ?? this.attractionList,
       searchList: searchList ?? this.searchList,
       attractionListTwo: attractionListTwo ?? this.attractionListTwo,
@@ -72,6 +78,7 @@ class HomeState {
         error: null,
         attractionList: Attraction(posts: []),
         searchList: Attraction(posts: []),
+        hotelList: HotelModel(hotels: []),
         attractionListTwo: null,
         isSearching: false,
         isUpdated: false,
