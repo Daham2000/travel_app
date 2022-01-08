@@ -11,16 +11,20 @@ String attractionToJson(Attraction data) => json.encode(data.toJson());
 class Attraction {
   Attraction({
     this.posts,
+    this.totalItems,
   });
 
   List<Post> posts;
+  int totalItems;
 
   factory Attraction.fromJson(Map<String, dynamic> json) => Attraction(
     posts: List<Post>.from(json["posts"].map((x) => Post.fromJson(x))),
+    totalItems: json["totalItems"],
   );
 
   Map<String, dynamic> toJson() => {
     "posts": List<dynamic>.from(posts.map((x) => x.toJson())),
+    "totalItems": totalItems,
   };
 }
 

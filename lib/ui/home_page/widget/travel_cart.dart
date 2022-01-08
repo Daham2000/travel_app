@@ -79,7 +79,7 @@ class TravelCart extends StatelessWidget {
                       imageUrl: img,
                       placeholder: (context, url) =>
                           Center(child: CircularProgressIndicator()),
-                      fit: isAd? BoxFit.fill : BoxFit.contain,
+                      fit: isAd? BoxFit.fill : BoxFit.cover,
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                   ),

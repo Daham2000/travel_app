@@ -37,8 +37,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         Attraction resultant = state.attractionList;
         Attraction attractionModel = await
           AttractionApi().getAll(state.page, "", state.limit);
-        for (final post in attractionModel.posts){
-          postList.add(post);
+        if(attractionModel.totalItems>state.attractionList.posts.length){
+          for (final post in attractionModel.posts){
+            postList.add(post);
+          }
         }
         resultant.posts = postList;
         if(attractionModel.posts.length<state.limit){
