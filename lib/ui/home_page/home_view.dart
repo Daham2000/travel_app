@@ -209,18 +209,23 @@ class _HomeViewState extends State<HomeView> {
                           ],
                         ),
                       ),
-                      for (final h in state.hotelList.hotels)
-                        TravelCart(
-                          title: h.title,
-                          img: h.images[0],
-                          isAd:true,
-                          url: h.link,
-                          description: "",
-                          shortDetails: "",
-                          youtubeID: "",
-                          district:  h.district,
-                          latLng: [],
-                        ),
+                      state.searchList.posts.length > 0
+                          ? Container() : Column(
+                        children: [
+                          for (int i = 0; i < 2; i++)
+                            i==2? Container():TravelCart(
+                              title: state.hotelList.hotels[i].title,
+                              img: state.hotelList.hotels[i].images[0],
+                              isAd:true,
+                              url: state.hotelList.hotels[i].link,
+                              description: "",
+                              shortDetails: "",
+                              youtubeID: "",
+                              district:  state.hotelList.hotels[i].district,
+                              latLng: [],
+                            ),
+                        ],
+                      ),
                       state.isSearching
                           ? Center(child: CupertinoActivityIndicator())
                           : Container(),
