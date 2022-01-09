@@ -7,6 +7,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_app/db/model/hotel.dart';
+import 'package:travel_app/utill/transitions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'single_post.dart';
@@ -22,6 +24,7 @@ class TravelCart extends StatelessWidget {
   final String district;
   final String url;
   final List<dynamic> latLng;
+  final HotelModel hotelModel;
 
   const TravelCart(
       {this.latLng,
@@ -33,6 +36,7 @@ class TravelCart extends StatelessWidget {
       this.shortDetails,
       this.description,
       this.youtubeID,
+      this.hotelModel,
       this.district});
 
   void _launchURL() async {
@@ -48,8 +52,9 @@ class TravelCart extends StatelessWidget {
         }else{
           Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => SinglePost(
+              SlideBottomRoute(
+                  page: SinglePost(
+                    hotelModel: hotelModel,
                       travelCart: new TravelCart(
                         title: this.title,
                         description: this.description,
@@ -60,96 +65,93 @@ class TravelCart extends StatelessWidget {
                       ))));
         }
       },
-      child: Hero(
-        tag: title,
-        child: Material(
-          color: Colors.transparent,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-            child: Stack(
-              alignment: AlignmentDirectional.center,
-              children: [
-                Container(
-                  width: isAd? MediaQuery.of(context).size.width * 0.81 :
-                  MediaQuery.of(context).size.width * 0.73,
-                  height: MediaQuery.of(context).size.width * 0.43,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    child: CachedNetworkImage(
-                      imageUrl: img,
-                      placeholder: (context, url) =>
-                          Center(child: CircularProgressIndicator()),
-                      fit: isAd? BoxFit.fill : BoxFit.cover,
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
+      child: Material(
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Container(
+                width: isAd? MediaQuery.of(context).size.width * 0.81 :
+                MediaQuery.of(context).size.width * 0.73,
+                height: MediaQuery.of(context).size.width * 0.43,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  child: CachedNetworkImage(
+                    imageUrl: img,
+                    placeholder: (context, url) =>
+                        Center(child: CircularProgressIndicator()),
+                    fit: isAd? BoxFit.fill : BoxFit.cover,
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
-                isAd ? Positioned(
-                  top: 10.0,
-                    left: 50.0,
-                    child: Container(
-                  width: 20,
-                  height: 15,
-                  color: Colors.amber,
-                  child:Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Text("AD",style: GoogleFonts.mulish(
-                      fontSize: 7.0,
-                      fontWeight: FontWeight.bold
-                    ),
-                    textAlign: TextAlign.center,),
-                  )
-                )) : Container(),
-                Positioned(
-                  bottom: -5.0,
+              ),
+              isAd ? Positioned(
+                top: 10.0,
+                  left: 50.0,
                   child: Container(
-                      height: isAd? 50.0 : 30,
-                      width: isAd? MediaQuery.of(context).size.width * 0.65 :
-                      MediaQuery.of(context).size.width * 0.55,
-                      margin: const EdgeInsets.only(bottom: 6.0),
-                      //Same as `blurRadius` i guess
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.transparent,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black,
-                            offset: Offset(0.0, 5.0), //(x,y)
-                            blurRadius: 40.0,
-                          ),
-                        ],
-                      )),
-                ),
-                Positioned(
-                  bottom: isAd ? 26.0:10.0,
-                  left: 50.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      title,
-                      style: GoogleFonts.mulish(
-                        fontSize: 15.0,
-                        color: Colors.white,
-                      ),
+                width: 20,
+                height: 15,
+                color: Colors.amber,
+                child:Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text("AD",style: GoogleFonts.mulish(
+                    fontSize: 7.0,
+                    fontWeight: FontWeight.bold
+                  ),
+                  textAlign: TextAlign.center,),
+                )
+              )) : Container(),
+              Positioned(
+                bottom: -5.0,
+                child: Container(
+                    height: isAd? 50.0 : 30,
+                    width: isAd? MediaQuery.of(context).size.width * 0.65 :
+                    MediaQuery.of(context).size.width * 0.55,
+                    margin: const EdgeInsets.only(bottom: 6.0),
+                    //Same as `blurRadius` i guess
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: Colors.transparent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black,
+                          offset: Offset(0.0, 5.0), //(x,y)
+                          blurRadius: 40.0,
+                        ),
+                      ],
+                    )),
+              ),
+              Positioned(
+                bottom: isAd ? 26.0:10.0,
+                left: 50.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    title,
+                    style: GoogleFonts.mulish(
+                      fontSize: 15.0,
+                      color: Colors.white,
                     ),
                   ),
                 ),
-                isAd? Positioned(
-                  bottom: 10.0,
-                  left: 50.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      district,
-                      style: GoogleFonts.mulish(
-                        fontSize: 12.0,
-                        color: Colors.white,
-                      ),
+              ),
+              isAd? Positioned(
+                bottom: 10.0,
+                left: 50.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    district,
+                    style: GoogleFonts.mulish(
+                      fontSize: 12.0,
+                      color: Colors.white,
                     ),
                   ),
-                ) : Container(),
-              ],
-            ),
+                ),
+              ) : Container(),
+            ],
           ),
         ),
       ),

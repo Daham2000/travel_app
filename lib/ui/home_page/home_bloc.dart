@@ -10,14 +10,19 @@ import 'package:travel_app/db/api/attraction_api.dart';
 import 'package:travel_app/db/api/hotel_api.dart';
 import 'package:travel_app/db/model/attraction.dart';
 import 'package:travel_app/db/model/hotel.dart';
+import 'package:travel_app/ui/root_page/root_bloc.dart';
 
 import 'home_event.dart';
 import 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc(BuildContext context) : super(HomeState.initialState) {
+  RootBloc rootBloc;
+
+  HomeBloc(BuildContext context,{String miv = "1"}) : super(HomeState.initialState) {
+    rootBloc = BlocProvider.of<RootBloc>(context);
     add(GetDataAttractionEvent());
-    getHotelList("2");
+    print(miv);
+    getHotelList(miv);
   }
 
   void searchAttraction(String query) async {
@@ -32,9 +37,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     add(LoadingEvent(false));
   }
 
-  void getHotelList(String query) async {
+  void getHotelList(String miv) async {
     add(LoadingEvent(true));
-    HotelModel hotelModel = await HotelApi().getAll(1, query, 2);
+    HotelModel hotelModel = await HotelApi().getAll(1, miv, 10);
     if (hotelModel == null) {
       print('Unable to retrieve data (Searching)');
     } else {

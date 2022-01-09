@@ -7,17 +7,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_app/db/api/user_api.dart';
 import 'package:travel_app/db/auth/authentication.dart';
 
 import 'root_event.dart';
 import 'root_state.dart';
 
 class RootBloc extends Bloc<RootEvent, RootState> {
-  RootBloc(BuildContext context,{bool isLogin}) : super(RootState.initialState) {
+  RootBloc(BuildContext context,{bool isLogin = false}) : super(RootState.initialState) {
     if(isLogin){
       add(LoginEvent(isAutoLogin: true));
     }
   }
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   Stream<RootState> mapEventToState(RootEvent event) async* {
@@ -65,12 +67,13 @@ class RootBloc extends Bloc<RootEvent, RootState> {
             );
           }else{
             if (response.user != null) {
-              print("Avalible user...");
+              final String token = await auth.currentUser.getIdToken();
+              final userModel = await UserAPI().loginUser(token);
               if (response.user.email != null) {
-                print("Avalible user...");
                 yield state.clone(
                   isLoginSuccess: true,
                   isLoading: false,
+                  userModel: userModel,
                 );
               }
             }else {
@@ -86,11 +89,14 @@ class RootBloc extends Bloc<RootEvent, RootState> {
           User user = await Authentication().getLoggedUser();
           if (user != null) {
             if (user.email != null) {
+              final String token = await auth.currentUser.getIdToken();
+              final userModel = await UserAPI().loginUser(token);
               print("Avalible user...");
               yield state.clone(
                 isLoginSuccess: true,
                 isLoading: false,
                 error: "User available",
+                userModel: userModel
               );
             } else {
               yield state.clone(

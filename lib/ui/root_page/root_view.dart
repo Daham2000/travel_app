@@ -45,6 +45,7 @@ class _RootViewState extends State<RootView> {
       buildWhen: (pre, current) =>
           pre.error != current.error ||
           pre.isLoading != current.isLoading ||
+          pre.userModel != current.userModel ||
           pre.isLoginSuccess != current.isLoginSuccess,
       builder: (context, state) {
         if (state.error == "User not available" &&
@@ -60,7 +61,8 @@ class _RootViewState extends State<RootView> {
           rootBloc.add(ClearEvent());
           Future.microtask(
             () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => HomeProvider())),
+                MaterialPageRoute(builder: (context) => HomeProvider
+                  (miv: state.userModel.miv.toString(),))),
           );
         }
         return Scaffold();

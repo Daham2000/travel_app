@@ -18,7 +18,7 @@ class User {
   String firstName;
   DateTime lastLogin;
   String lastName;
-  int miv;
+  double miv;
   String uid;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -26,7 +26,7 @@ class User {
     firstName: json["firstName"],
     lastLogin: DateTime.parse(json["lastLogin"]),
     lastName: json["lastName"],
-    miv: json["miv"],
+    miv: json["miv"].toDouble(),
     uid: json["uid"],
   );
 

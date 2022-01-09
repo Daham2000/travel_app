@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:travel_app/ui/root_page/root_bloc.dart';
+import 'package:travel_app/ui/root_page/root_state.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import 'home_bloc.dart';
@@ -28,12 +30,14 @@ class _HomeViewState extends State<HomeView> {
   final searchController = TextEditingController();
   ScrollController listController = ScrollController();
   String version;
+  RootBloc rootBloc;
 
   @override
   void initState() {
     super.initState();
     getAppVersion();
     homeBloc = BlocProvider.of<HomeBloc>(context);
+    rootBloc = BlocProvider.of<RootBloc>(context);
     listController.addListener(_scrollListener);
   }
 
@@ -232,6 +236,7 @@ class _HomeViewState extends State<HomeView> {
                           youtubeID: e.youtubeId,
                           district: e.district,
                           latLng: e.latLng,
+                          hotelModel: state.hotelList,
                         ),
                     ],
                   )
