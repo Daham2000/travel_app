@@ -28,8 +28,10 @@ class HotelApi {
     try {
       response = await dio.get(UrlConstants.GET_HOTELS,
           queryParameters: queryParameter);
+      print(response.statusCode.toString());
       if (response.statusCode == 200) {
         final jsonString = response.data;
+        print(jsonString);
         hotelModel = HotelModel.fromJson(jsonString);
         return hotelModel;
       }

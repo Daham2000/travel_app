@@ -59,6 +59,7 @@ class _HomeViewState extends State<HomeView> {
         buildWhen: (pre, current) =>
             pre.error != current.error ||
             pre.moreSearching != current.moreSearching ||
+            pre.hotelList != current.hotelList ||
             pre.isSearching != current.isSearching ||
             pre.isUpdated != current.isUpdated ||
             pre.searchList != current.searchList,
@@ -210,7 +211,7 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                       state.searchList.posts.length > 0
-                          ? Container() : Column(
+                          ? Container() : state.hotelList.hotels.length>0 ? Column(
                         children: [
                           for (int i = 0; i < 2; i++)
                             i==2? Container():TravelCart(
@@ -225,7 +226,7 @@ class _HomeViewState extends State<HomeView> {
                               latLng: [],
                             ),
                         ],
-                      ),
+                      ) : Container(),
                       state.isSearching
                           ? Center(child: CupertinoActivityIndicator())
                           : Container(),

@@ -49,7 +49,7 @@ class RootState {
   }
 
   static RootState get initialState => RootState(
-        error: null,
+        error: "",
         userModel: null,
         isLoginSuccess: false,
         isRegSuccess: false,

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 class UserAPI{
 
   Future<User> loginUser(String token)async{
+    print("loginUser api call...");
     final String pathParameters = "?loginTime=2021-12-23";
     User userModel;
     final String path = "${UrlConstants.LOGIN_USER}$pathParameters";
@@ -18,6 +19,7 @@ class UserAPI{
           "Authorization": 'Bearer $token',
         },
       );
+      print(response.statusCode.toString());
       if (response.statusCode == 200) {
         final jsonString = response.body;
         print(jsonString);

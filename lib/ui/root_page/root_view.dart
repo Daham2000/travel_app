@@ -59,11 +59,20 @@ class _RootViewState extends State<RootView> {
         } else if (state.isLoginSuccess == true) {
           print("Navigating to Home page...");
           rootBloc.add(ClearEvent());
-          Future.microtask(
-            () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => HomeProvider
-                  (miv: state.userModel.miv.toString(),))),
-          );
+          if(state.userModel!=null){
+            Future.microtask(
+                  () => Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => HomeProvider
+                    (miv: state.userModel.miv.toStringAsFixed(0))),
+            ));
+          }else{
+            Future.microtask(
+                  () => Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => HomeProvider
+                    (miv: "1"))),
+            );
+          }
+
         }
         return Scaffold();
       },

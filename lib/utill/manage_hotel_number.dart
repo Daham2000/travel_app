@@ -6,7 +6,7 @@ class ManageHotelNumber{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int hotelNumber = (prefs.getInt('hotelNumber') ?? 0) + 1;
     print('Pressed $hotelNumber times.');
-    if(hotelNumber>2){
+    if(hotelNumber>4){
       await prefs.setInt('hotelNumber', 0);
     }else{
       await prefs.setInt('hotelNumber', hotelNumber);
