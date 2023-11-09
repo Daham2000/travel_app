@@ -9,11 +9,11 @@ import 'package:travel_app/db/model/user.dart';
 
 @immutable
 class RootState {
-  final String error;
-  final bool isLoginSuccess;
-  final bool isRegSuccess;
-  final bool isLoading;
-  final User userModel;
+  final String? error;
+  final bool? isLoginSuccess;
+  final bool? isRegSuccess;
+  final bool? isLoading;
+  final User? userModel;
 
   RootState({
     this.error,
@@ -33,11 +33,11 @@ class RootState {
         );
 
   RootState clone({
-    String error,
-    bool isLoginSuccess,
-    bool isRegSuccess,
-    bool isLoading,
-    User userModel,
+    String? error,
+    bool? isLoginSuccess,
+    bool? isRegSuccess,
+    bool? isLoading,
+    User? userModel,
   }) {
     return RootState(
       error: error ?? this.error,

@@ -1,9 +1,9 @@
 class UrlConstants {
   static const String ALL_POSTS =
-      'http://maythendserver-env.eba-gqvmjrex.us-east-2.elasticbeanstalk.com/posts';
+      'http://192.168.8.140:5000/posts';
 
   static const String GET_HOTELS =
-      'http://maythendserver-env.eba-gqvmjrex.us-east-2.elasticbeanstalk.com/hotels';
+      'http://192.168.8.140:5000/hotels';
 
-  static const String LOGIN_USER = 'http://maythendserver-env.eba-gqvmjrex.us-east-2.elasticbeanstalk.com/auth/login';
+  static const String LOGIN_USER = 'http://192.168.8.140:5000/auth/login';
 }

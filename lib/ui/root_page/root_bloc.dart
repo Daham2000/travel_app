@@ -16,7 +16,7 @@ import 'root_state.dart';
 class RootBloc extends Bloc<RootEvent, RootState> {
   RootBloc(BuildContext context,{bool isLogin = false}) : super(RootState.initialState) {
     if(isLogin){
-      add(LoginEvent(isAutoLogin: true));
+      add(LoginEvent(isAutoLogin: true, name: '', password: ''));
     }
   }
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -35,11 +35,11 @@ class RootBloc extends Bloc<RootEvent, RootState> {
       case RegisterUserEvent:
         yield state.clone(isLoading: true, error: "");
         final data = event as RegisterUserEvent;
-        UserCredential response = await Authentication().registerUser(
+        UserCredential? response = await Authentication().registerUser(
           email: data.name,
           password: data.password,
         );
-        if (response.user.email != null) {
+        if (response?.user?.email != null) {
           yield state.clone(isRegSuccess: true, isLoading: false);
         } else {
           yield state.clone(
@@ -54,7 +54,7 @@ class RootBloc extends Bloc<RootEvent, RootState> {
         final data = event as LoginEvent;
         yield state.clone(isLoading: true, error: "");
         if (data.isAutoLogin == false) {
-          UserCredential response = await Authentication().login(
+          UserCredential? response = await Authentication().login(
             email: data.name,
             password: data.password,
           );
@@ -67,9 +67,9 @@ class RootBloc extends Bloc<RootEvent, RootState> {
             );
           }else{
             if (response.user != null) {
-              final String token = await auth.currentUser.getIdToken();
-              final userModel = await UserAPI().loginUser(token);
-              if (response.user.email != null) {
+              final String? token = await auth.currentUser?.getIdToken();
+              final userModel = await UserAPI().loginUser(token ?? "");
+              if (response.user?.email != null) {
                 yield state.clone(
                   isLoginSuccess: true,
                   isLoading: false,
@@ -86,11 +86,11 @@ class RootBloc extends Bloc<RootEvent, RootState> {
           }
 
         } else {
-          User user = await Authentication().getLoggedUser();
+          User? user = await Authentication().getLoggedUser();
           if (user != null) {
             if (user.email != null) {
-              final String token = await auth.currentUser.getIdToken();
-              final userModel = await UserAPI().loginUser(token);
+              final String? token = await auth.currentUser?.getIdToken();
+              final userModel = await UserAPI().loginUser(token ?? "");
               print("Avalible user...");
               yield state.clone(
                 isLoginSuccess: true,

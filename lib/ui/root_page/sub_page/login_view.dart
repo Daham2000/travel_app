@@ -20,7 +20,7 @@ import 'login_provider.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -32,13 +32,13 @@ class _LoginViewState extends State<LoginView> {
   var lastNameCtrl = TextEditingController();
   var emailCtrl = TextEditingController();
   var passCtrl = TextEditingController();
-  String email;
-  String firstName;
-  String lastName;
-  String password;
+  String? email;
+  String? firstName;
+  String? lastName;
+  String? password;
   final _formKey = GlobalKey<FormState>();
   final _loginKey = GlobalKey<FormState>();
-  RootBloc rootBloc;
+  RootBloc? rootBloc;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void loginUser() {
-    rootBloc.add(LoginEvent(
+    rootBloc?.add(LoginEvent(
       name: emailCtrl.text.trim(),
       password: passCtrl.text.trim(),
       isAutoLogin: false,
@@ -55,7 +55,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void registerUser() {
-    rootBloc.add(RegisterUserEvent(
+    rootBloc?.add(RegisterUserEvent(
       name: emailCtrl.text.trim(),
       password: passCtrl.text.trim(),
     ));
@@ -96,7 +96,7 @@ class _LoginViewState extends State<LoginView> {
         color: Colors.black,
       ),
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return 'Please enter your first name';
         } else {
           firstName = value.trim();
@@ -114,7 +114,7 @@ class _LoginViewState extends State<LoginView> {
         color: Colors.black,
       ),
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return 'Please enter your last name';
         } else {
           lastName = value.trim();
@@ -132,7 +132,7 @@ class _LoginViewState extends State<LoginView> {
         color: Colors.black,
       ),
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return 'Please enter your email';
         } else {
           email = value.trim();
@@ -152,9 +152,9 @@ class _LoginViewState extends State<LoginView> {
         color: Colors.black,
       ),
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return 'Please input the password';
-        } else if (value.length < 6) {
+        } else if (value!.length < 6) {
           return 'Please input at least 6 characters';
         } else {
           password = value;
@@ -185,7 +185,7 @@ class _LoginViewState extends State<LoginView> {
                   SlideRightRoute(page: IntroView())),
             );
           }
-          if (state.error.length > 1) {
+          if (state!.error!.length > 1) {
             return Scaffold(body: alert,backgroundColor: Colors.white,);
           }
           return DefaultTabController(
@@ -292,7 +292,7 @@ class _LoginViewState extends State<LoginView> {
                                   width: MediaQuery.of(context).size.width,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      if (_loginKey.currentState.validate()) {
+                                      if (_loginKey.currentState!.validate()) {
                                         loginUser();
                                       }
                                     },
@@ -389,7 +389,7 @@ class _LoginViewState extends State<LoginView> {
                                     width: MediaQuery.of(context).size.width,
                                     child: ElevatedButton(
                                       onPressed: () async {
-                                        if (_formKey.currentState.validate()) {
+                                        if (_formKey.currentState!.validate()) {
                                           registerUser();
                                         }
                                       },

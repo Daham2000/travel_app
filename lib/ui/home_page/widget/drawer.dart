@@ -17,7 +17,7 @@ class DrawerHome extends StatelessWidget {
   final String version;
   final double gap = 20;
 
-  const DrawerHome({Key key, this.version});
+  const DrawerHome({Key? key, required this.version});
 
   @override
   Widget build(BuildContext context) {

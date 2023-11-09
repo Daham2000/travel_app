@@ -10,8 +10,8 @@ String hotelModelToJson(HotelModel data) => json.encode(data.toJson());
 
 class HotelModel {
   HotelModel({
-    this.hotels,
-    this.totalItems,
+    required this.hotels,
+    required this.totalItems,
   });
 
   List<Hotel> hotels;
@@ -30,13 +30,13 @@ class HotelModel {
 
 class Hotel {
   Hotel({
-    this.images,
-    this.description,
-    this.district,
-    this.link,
-    this.miv,
-    this.rate,
-    this.title,
+    required this.images,
+    required this.description,
+    required this.district,
+    required this.link,
+    required this.miv,
+    required this.rate,
+    required this.title,
   });
 
   List<String> images;

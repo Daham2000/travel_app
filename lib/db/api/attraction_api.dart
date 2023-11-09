@@ -4,25 +4,23 @@
  *
  */
 
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:travel_app/db/constants/url.dart';
 import 'package:travel_app/db/model/attraction.dart';
 
 class AttractionApi {
-  static AttractionApi categoryAPI;
-  Response response;
+  static AttractionApi categoryAPI = new AttractionApi();
+  Response? response;
   final dio = Dio();
 
-  factory AttractionApi() {
-    if (categoryAPI == null) {
-      categoryAPI = AttractionApi._internal();
-    }
-    return categoryAPI;
-  }
+  // factory AttractionApi() {
+  //   if (categoryAPI == null) {
+  //     categoryAPI = AttractionApi._internal();
+  //   }
+  //   return categoryAPI;
+  // }
 
-  AttractionApi._internal();
+  // AttractionApi._internal();
 
   Future<Attraction> getAll(int page,String query,int limit) async {
 
@@ -31,13 +29,13 @@ class AttractionApi {
       "query": query,
       "limit": "${limit.toString()}",
     };
-    Attraction attractionModel;
+    Attraction attractionModel = new Attraction(totalItems: 0, posts: []);
 
     try {
       response = await dio.get(UrlConstants.ALL_POSTS,
           queryParameters: queryParameter);
-      if (response.statusCode == 200) {
-        final jsonString = response.data;
+      if (response?.statusCode == 200) {
+        final jsonString = response?.data;
         attractionModel = Attraction.fromJson(jsonString);
         return attractionModel;
       }

@@ -12,7 +12,7 @@ import 'root_view.dart';
 
 class RootProvider extends BlocProvider<RootBloc> {
   RootProvider({
-    Key key
+    Key? key
   }) : super (
     key: key,
     create: (context) => RootBloc(context,isLogin: true),

@@ -10,28 +10,28 @@ import 'package:travel_app/db/model/hotel.dart';
 
 @immutable
 class HomeState {
-  final String error;
-  final Attraction attractionList;
-  final Attraction searchList;
-  final HotelModel hotelList;
-  final List attractionListTwo;
-  final bool isSearching;
-  final int page;
-  final int limit;
-  final bool moreSearching;
-  final bool isUpdated;
+  final String? error;
+  final Attraction? attractionList;
+  final Attraction? searchList;
+  final HotelModel? hotelList;
+  final List? attractionListTwo;
+  final bool? isSearching;
+  final int? page;
+  final int? limit;
+  final bool? moreSearching;
+  final bool? isUpdated;
 
   HomeState({
-    this.error,
-    this.attractionList,
-    this.attractionListTwo,
-    this.searchList,
-    this.isSearching,
-    this.page,
-    this.limit,
-    this.moreSearching,
-    this.isUpdated,
-    this.hotelList,
+    required this.error,
+    required this.attractionList,
+    required this.attractionListTwo,
+    required this.searchList,
+    required this.isSearching,
+    required this.page,
+    required this.limit,
+    required this.moreSearching,
+    required this.isUpdated,
+    required this.hotelList,
   });
 
   HomeState.init()
@@ -49,16 +49,16 @@ class HomeState {
         );
 
   HomeState clone({
-    String error,
-    Attraction attractionList,
-    Attraction searchList,
-    HotelModel hotelList,
-    List attractionListTwo,
-    bool isSearching,
-    bool moreSearching,
-    bool isUpdated,
-    int page,
-    int limit,
+    String? error,
+    Attraction? attractionList,
+    Attraction? searchList,
+    HotelModel? hotelList,
+    List? attractionListTwo,
+    bool? isSearching,
+    bool? moreSearching,
+    bool? isUpdated,
+    int? page,
+    int? limit,
   }) {
     return HomeState(
       error: error ?? this.error,
@@ -76,9 +76,9 @@ class HomeState {
 
   static HomeState get initialState => HomeState(
         error: null,
-        attractionList: Attraction(posts: []),
-        searchList: Attraction(posts: []),
-        hotelList: HotelModel(hotels: []),
+        attractionList: Attraction(posts: [], totalItems: 0),
+        searchList: Attraction(posts: [], totalItems: 0),
+        hotelList: HotelModel(hotels: [], totalItems: 0),
         attractionListTwo: null,
         isSearching: false,
         isUpdated: false,

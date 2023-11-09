@@ -8,7 +8,7 @@ class UserAPI{
   Future<User> loginUser(String token)async{
     print("loginUser api call...");
     final String pathParameters = "?loginTime=2021-12-23";
-    User userModel;
+    User userModel = new User(email: '', firstName: '', lastLogin: DateTime.now(), lastName: '', miv: 0, uid: '');
     final String path = "${UrlConstants.LOGIN_USER}$pathParameters";
     var url = Uri.parse(path);
     try{

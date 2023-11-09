@@ -21,12 +21,12 @@ class _RootViewState extends State<RootView> {
   var passCtrl = TextEditingController();
   var nameCtrl = TextEditingController();
   var emailCtrl = TextEditingController();
-  String email;
-  String name;
-  String password;
+  String? email;
+  String? name;
+  String? password;
 
   // ignore: close_sinks
-  RootBloc rootBloc;
+  RootBloc? rootBloc;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _RootViewState extends State<RootView> {
       builder: (context, state) {
         if (state.error == "User not available" &&
             state.isLoginSuccess == false) {
-          rootBloc.add(ClearEvent());
+          rootBloc?.add(ClearEvent());
           print("Navigating to Login page...");
           Future.microtask(
             () => Navigator.pushReplacement(context,
@@ -58,12 +58,12 @@ class _RootViewState extends State<RootView> {
           );
         } else if (state.isLoginSuccess == true) {
           print("Navigating to Home page...");
-          rootBloc.add(ClearEvent());
+          rootBloc?.add(ClearEvent());
           if(state.userModel!=null){
             Future.microtask(
                   () => Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => HomeProvider
-                    (miv: state.userModel.miv.toStringAsFixed(0))),
+                    (miv: state.userModel?.miv.toStringAsFixed(0))),
             ));
           }else{
             Future.microtask(

@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 
-InputDecoration customInputDecoration({String hintText}){
+InputDecoration customInputDecoration({String? hintText}){
   return InputDecoration(
     hintText: hintText,
     labelText: hintText,

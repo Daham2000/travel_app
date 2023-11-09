@@ -11,7 +11,7 @@ import '../root_bloc.dart';
 import 'login_view.dart';
 
 class LoginProvider extends BlocProvider<RootBloc> {
-  LoginProvider({Key key})
+  LoginProvider({Key? key})
       : super(
           key: key,
           create: (context) => RootBloc(context,isLogin: false),

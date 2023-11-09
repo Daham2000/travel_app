@@ -10,8 +10,8 @@ String attractionToJson(Attraction data) => json.encode(data.toJson());
 
 class Attraction {
   Attraction({
-    this.posts,
-    this.totalItems,
+     required this.posts,
+    required this.totalItems,
   });
 
   List<Post> posts;
@@ -30,13 +30,13 @@ class Attraction {
 
 class Post {
   Post({
-    this.description,
-    this.district,
-    this.images,
-    this.latLng,
-    this.shortDetail,
-    this.title,
-    this.youtubeId,
+    required this.description,
+    required this.district,
+    required this.images,
+    required this.latLng,
+    required this.shortDetail,
+    required this.title,
+    required this.youtubeId,
   });
 
   String description;

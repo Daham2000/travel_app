@@ -27,17 +27,17 @@ class TravelCart extends StatelessWidget {
   final HotelModel hotelModel;
 
   const TravelCart(
-      {this.latLng,
-      this.img,
-      this.isAd,
-      this.url,
-      this.rate,
-      this.title,
-      this.shortDetails,
-      this.description,
-      this.youtubeID,
-      this.hotelModel,
-      this.district});
+      {required this.latLng,
+        required this.img,
+        required this.isAd,
+        required this.url,
+        required this.rate,
+        required this.title,
+        required this.shortDetails,
+        required this.description,
+        required this.youtubeID,
+        required this.hotelModel,
+        required this.district});
 
   void _launchURL() async {
     if (!await launch(this.url)) throw 'Could not launch ${this.url}';
@@ -61,7 +61,7 @@ class TravelCart extends StatelessWidget {
                         img: this.img,
                         youtubeID: this.youtubeID,
                         district: this.district,
-                        latLng: this.latLng,
+                        latLng: this.latLng, hotelModel: HotelModel(hotels: [], totalItems: 0), isAd: false, url: '', rate: 0, shortDetails: '',
                       ))));
         }
       },

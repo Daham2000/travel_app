@@ -6,12 +6,12 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   User({
-    this.email,
-    this.firstName,
-    this.lastLogin,
-    this.lastName,
-    this.miv,
-    this.uid,
+    required this.email,
+    required this.firstName,
+    required this.lastLogin,
+    required this.lastName,
+    required this.miv,
+    required this.uid,
   });
 
   String email;

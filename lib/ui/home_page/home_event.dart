@@ -14,7 +14,7 @@ abstract class HomeEvent {}
 class GetDataAttractionEvent extends HomeEvent {
   final List<Attraction> list;
 
-  GetDataAttractionEvent({this.list});
+  GetDataAttractionEvent({required this.list});
 }
 
 class SearchDocument extends HomeEvent {

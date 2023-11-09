@@ -3,18 +3,9 @@ import 'package:travel_app/db/constants/url.dart';
 import 'package:travel_app/db/model/hotel.dart';
 
 class HotelApi {
-  static HotelApi hotelApi;
-  Response response;
+  static HotelApi hotelApi = new HotelApi();
+  Response? response;
   final dio = Dio();
-
-  factory HotelApi() {
-    if (hotelApi == null) {
-      hotelApi = HotelApi._internal();
-    }
-    return hotelApi;
-  }
-
-  HotelApi._internal();
 
   Future<HotelModel> getAll(int page,String query,int limit) async {
 
@@ -23,14 +14,14 @@ class HotelApi {
       "query": query,
       "limit": "${limit.toString()}",
     };
-    HotelModel hotelModel;
+    HotelModel hotelModel = new HotelModel(totalItems: 0, hotels: []);
 
     try {
       response = await dio.get(UrlConstants.GET_HOTELS,
           queryParameters: queryParameter);
-      print(response.statusCode.toString());
-      if (response.statusCode == 200) {
-        final jsonString = response.data;
+      print(response?.statusCode.toString());
+      if (response?.statusCode == 200) {
+        final jsonString = response?.data;
         print(jsonString);
         hotelModel = HotelModel.fromJson(jsonString);
         return hotelModel;

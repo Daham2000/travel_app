@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:travel_app/db/model/hotel.dart';
 import 'package:travel_app/ui/root_page/root_bloc.dart';
 import 'package:travel_app/ui/root_page/root_state.dart';
 import 'package:travel_app/utill/image_assets.dart';
@@ -26,11 +27,11 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   // ignore: close_sinks
-  HomeBloc homeBloc;
+  late HomeBloc homeBloc;
   final searchController = TextEditingController();
   ScrollController listController = ScrollController();
-  String version;
-  RootBloc rootBloc;
+  String version = "loading...";
+  late RootBloc rootBloc;
 
   @override
   void initState() {
@@ -44,7 +45,7 @@ class _HomeViewState extends State<HomeView> {
   void _scrollListener() {
     if (listController.offset >= listController.position.maxScrollExtent &&
         !listController.position.outOfRange) {
-      homeBloc.add(GetDataAttractionEvent());
+      homeBloc.add(GetDataAttractionEvent(list: []));
     }
   }
 
@@ -143,7 +144,7 @@ class _HomeViewState extends State<HomeView> {
                             fontFamily: "Avenir LT Std",
                             fontWeight: FontWeight.w300,
                             color: Colors.black),
-                        prefixIcon: state.searchList.posts.isNotEmpty == true
+                        prefixIcon: state.searchList?.posts.isNotEmpty == true
                             ? Padding(
                                 padding: const EdgeInsets.only(
                                     right: 2.0, top: 5, bottom: 5, left: 2),
@@ -210,29 +211,29 @@ class _HomeViewState extends State<HomeView> {
                           ],
                         ),
                       ),
-                      state.searchList.posts.length > 0
-                          ? Container() : state.hotelList.hotels.length>0 ? Column(
+                      state.searchList!.posts.length > 0
+                          ? Container() : state.hotelList!.hotels.length>0 ? Column(
                         children: [
                           for (int i = 0; i < 2; i++)
-                            i==2? Container():TravelCart(
-                              title: state.hotelList.hotels[i].title,
-                              img: state.hotelList.hotels[i].images[0],
+                            i==2? Container(): TravelCart(
+                              title: state.hotelList!.hotels[i].title,
+                              img: state.hotelList!.hotels[i].images[0],
                               isAd:true,
-                              url: state.hotelList.hotels[i].link,
+                              url: state.hotelList!.hotels[i].link,
                               description: "",
                               shortDetails: "",
                               youtubeID: "",
-                              district:  state.hotelList.hotels[i].district,
-                              latLng: [],
+                              district:  state.hotelList!.hotels[i].district,
+                              latLng: [], hotelModel: HotelModel(hotels: [], totalItems: 0), rate: 0,
                             ),
                         ],
                       ) : Container(),
-                      state.isSearching
-                          ? Center(child: CupertinoActivityIndicator())
+                      state.isSearching ?? false ?
+                          Center(child: CupertinoActivityIndicator())
                           : Container(),
-                      for (final e in state.searchList.posts.length > 0
-                          ? state.searchList.posts
-                          : state.attractionList.posts)
+                      for (final e in state.searchList!.posts.length > 0
+                          ? state.searchList!.posts
+                          : state.attractionList!.posts)
                         TravelCart(
                           title: e.title,
                           img: e.images[0],
@@ -242,7 +243,7 @@ class _HomeViewState extends State<HomeView> {
                           youtubeID: e.youtubeId,
                           district: e.district,
                           latLng: e.latLng,
-                          hotelModel: state.hotelList,
+                          hotelModel: new HotelModel(hotels: [], totalItems: 0), url: '', rate: 0,
                         ),
                     ],
                   )

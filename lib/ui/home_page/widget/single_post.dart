@@ -21,7 +21,7 @@ class SinglePost extends StatefulWidget {
   final TravelCart travelCart;
   final HotelModel hotelModel;
 
-  SinglePost({this.travelCart, this.hotelModel});
+  SinglePost({required this.travelCart, required this.hotelModel});
 
   @override
   _SinglePostState createState() => _SinglePostState();
@@ -30,7 +30,7 @@ class SinglePost extends StatefulWidget {
 class _SinglePostState extends State<SinglePost> {
   // YoutubePlayerController _controller;
 
-  YoutubePlayerController _controller;
+  late YoutubePlayerController _controller;
   int hotelNumber = 0;
 
   @override
@@ -39,7 +39,6 @@ class _SinglePostState extends State<SinglePost> {
     getNumber();
     saveNumber();
     _controller = YoutubePlayerController(
-      initialVideoId: widget.travelCart.youtubeID,
       params: YoutubePlayerParams(
         showControls: true,
         showFullscreenButton: true,
@@ -223,7 +222,7 @@ class _SinglePostState extends State<SinglePost> {
                         SizedBox(
                           height: 5,
                         ),
-                        YoutubePlayerIFrame(
+                        YoutubePlayer(
                           controller: _controller,
                           aspectRatio: 16 / 9,
                         ),
@@ -231,7 +230,7 @@ class _SinglePostState extends State<SinglePost> {
                           height: 15,
                         ),
                         TravelCart(
-                          title: widget.hotelModel.hotels[this.hotelNumber].title,
+                          title: widget.hotelModel.hotels.length > 0 ? widget.hotelModel.hotels[this.hotelNumber].title : "",
                           img: widget.hotelModel.hotels[this.hotelNumber].images[0],
                           isAd:true,
                           url: widget.hotelModel.hotels[this.hotelNumber].link,
@@ -239,7 +238,7 @@ class _SinglePostState extends State<SinglePost> {
                           shortDetails: "",
                           youtubeID: "",
                           district: widget.hotelModel.hotels[this.hotelNumber].district,
-                          latLng: [],
+                          latLng: [], rate: 0, hotelModel: HotelModel(hotels: [], totalItems: 0),
                         ),
                         SizedBox(
                           height: 15,
