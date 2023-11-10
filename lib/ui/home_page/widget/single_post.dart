@@ -231,13 +231,13 @@ class _SinglePostState extends State<SinglePost> {
                         ),
                         TravelCart(
                           title: widget.hotelModel.hotels.length > 0 ? widget.hotelModel.hotels[this.hotelNumber].title : "",
-                          img: widget.hotelModel.hotels[this.hotelNumber].images[0],
+                          img: widget.hotelModel.hotels.length > 0 ? widget.hotelModel.hotels[this.hotelNumber].images[0] : "",
                           isAd:true,
-                          url: widget.hotelModel.hotels[this.hotelNumber].link,
+                          url: widget.hotelModel.hotels.length > 0 ? widget.hotelModel.hotels[this.hotelNumber].link : "",
                           description: "",
                           shortDetails: "",
                           youtubeID: "",
-                          district: widget.hotelModel.hotels[this.hotelNumber].district,
+                          district: widget.hotelModel.hotels.length > 0 ? widget.hotelModel.hotels[this.hotelNumber].district : "",
                           latLng: [], rate: 0, hotelModel: HotelModel(hotels: [], totalItems: 0),
                         ),
                         SizedBox(
