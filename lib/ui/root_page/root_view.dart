@@ -48,6 +48,7 @@ class _RootViewState extends State<RootView> {
           pre.userModel != current.userModel ||
           pre.isLoginSuccess != current.isLoginSuccess,
       builder: (context, state) {
+        print("Root View");
         if (state.error == "User not available" &&
             state.isLoginSuccess == false) {
           rootBloc?.add(ClearEvent());
@@ -59,22 +60,25 @@ class _RootViewState extends State<RootView> {
         } else if (state.isLoginSuccess == true) {
           print("Navigating to Home page...");
           rootBloc?.add(ClearEvent());
-          if(state.userModel!=null){
+          if (state.userModel != null) {
+            Future.microtask(() => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomeProvider(
+                          miv: state.userModel?.miv.toStringAsFixed(0))),
+                ));
+          } else {
             Future.microtask(
-                  () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomeProvider
-                    (miv: state.userModel?.miv.toStringAsFixed(0))),
-            ));
-          }else{
-            Future.microtask(
-                  () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomeProvider
-                    (miv: "1"))),
+              () => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomeProvider(miv: "1"))),
             );
           }
-
         }
-        return Scaffold();
+        return Scaffold(
+          appBar: AppBar(),
+        );
       },
     );
   }

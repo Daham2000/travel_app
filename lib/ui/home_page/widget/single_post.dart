@@ -62,7 +62,6 @@ class _SinglePostState extends State<SinglePost> {
   void dispose() {
     super.dispose();
   }
-  CarouselController buttonCarouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +168,7 @@ class _SinglePostState extends State<SinglePost> {
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: StyledColor.ADD_ICON_COLOR,
+                              backgroundColor: StyledColor.ADD_ICON_COLOR,
                               elevation: 1.0,
                             ),
                             onPressed: (){
@@ -193,7 +192,7 @@ class _SinglePostState extends State<SinglePost> {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: StyledColor.GREEN_BTN,
+                              backgroundColor: StyledColor.GREEN_BTN,
                               elevation: 1.0,
                             ),
                             onPressed: (){

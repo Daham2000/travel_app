@@ -15,9 +15,9 @@ import 'root_state.dart';
 
 class RootBloc extends Bloc<RootEvent, RootState> {
   RootBloc(BuildContext context,{bool isLogin = false}) : super(RootState.initialState) {
-    if(isLogin){
-      add(LoginEvent(isAutoLogin: true, name: '', password: ''));
-    }
+    // if(isLogin){
+    //   add(LoginEvent(isAutoLogin: true, name: '', password: ''));
+    // }
   }
   FirebaseAuth auth = FirebaseAuth.instance;
 

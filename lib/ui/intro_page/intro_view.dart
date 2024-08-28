@@ -60,7 +60,7 @@ class IntroView extends StatelessWidget {
               SizedBox(height: 10.0,),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
+                  backgroundColor: Colors.blue,
                   elevation: 0,
                 ),
                 onPressed: () {

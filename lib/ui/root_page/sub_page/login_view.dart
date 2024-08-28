@@ -297,8 +297,8 @@ class _LoginViewState extends State<LoginView> {
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.transparent,
-                                      onPrimary: Colors.white,
+                                      backgroundColor: Colors.transparent,
+                                      foregroundColor: Colors.white,
                                       elevation: 0,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -394,8 +394,8 @@ class _LoginViewState extends State<LoginView> {
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.transparent,
-                                        onPrimary: Colors.white,
+                                        backgroundColor: Colors.transparent,
+                                        foregroundColor: Colors.white,
                                         elevation: 0,
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
