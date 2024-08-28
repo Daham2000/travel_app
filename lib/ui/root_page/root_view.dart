@@ -76,9 +76,7 @@ class _RootViewState extends State<RootView> {
             );
           }
         }
-        return Scaffold(
-          appBar: AppBar(),
-        );
+        return Scaffold();
       },
     );
   }
