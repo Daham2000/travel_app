@@ -7,10 +7,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/ui/home_page/home_provider.dart';
+import 'package:travel_app/ui/login_page/login_view.dart';
 import 'root_bloc.dart';
 import 'root_event.dart';
 import 'root_state.dart';
-import 'sub_page/login_provider.dart';
 
 class RootView extends StatefulWidget {
   @override
@@ -55,7 +55,7 @@ class _RootViewState extends State<RootView> {
           print("Navigating to Login page...");
           Future.microtask(
             () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => LoginProvider())),
+                MaterialPageRoute(builder: (context) => LoginView())),
           );
         } else if (state.isLoginSuccess == true) {
           print("Navigating to Home page...");

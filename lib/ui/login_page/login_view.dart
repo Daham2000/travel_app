@@ -7,16 +7,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:travel_app/db/auth/authentication.dart';
 import 'package:travel_app/ui/home_page/home_provider.dart';
 import 'package:travel_app/ui/intro_page/intro_view.dart';
+import 'package:travel_app/ui/root_page/root_view.dart';
 import 'package:travel_app/ui/root_page/widget/input_decoration.dart';
 import 'package:travel_app/utill/image_assets.dart';
 import 'package:travel_app/utill/transitions.dart';
 
-import '../root_bloc.dart';
-import '../root_event.dart';
-import '../root_state.dart';
-import 'login_provider.dart';
+import '../root_page/root_bloc.dart';
+import '../root_page/root_event.dart';
+import '../root_page/root_state.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({
@@ -38,27 +39,26 @@ class _LoginViewState extends State<LoginView> {
   String? password;
   final _formKey = GlobalKey<FormState>();
   final _loginKey = GlobalKey<FormState>();
-  RootBloc? rootBloc;
 
   @override
   void initState() {
-    rootBloc = BlocProvider.of<RootBloc>(context);
     super.initState();
   }
 
-  void loginUser() {
-    rootBloc?.add(LoginEvent(
-      name: emailCtrl.text.trim(),
-      password: passCtrl.text.trim(),
-      isAutoLogin: false,
-    ));
+  void loginUser() async {
+    await Authentication()
+        .login(email: emailCtrl.value.text, password: passCtrl.value.text);
+    Future.microtask(
+          () => Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => RootView())),
+    );
   }
 
-  void registerUser() {
-    rootBloc?.add(RegisterUserEvent(
-      name: emailCtrl.text.trim(),
-      password: passCtrl.text.trim(),
-    ));
+  void registerUser() async {
+    await Authentication().registerUser(
+        email: emailCtrl.value.text, password: passCtrl.value.text);
   }
 
   @override
@@ -76,12 +76,7 @@ class _LoginViewState extends State<LoginView> {
       ),
       actions: [
         InkWell(
-          onTap: () {
-            Future.microtask(
-              () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => LoginProvider())),
-            );
-          },
+          onTap: () {},
           child: Text(
             "Try again",
             style: TextStyle(color: Colors.blueAccent),
@@ -175,18 +170,21 @@ class _LoginViewState extends State<LoginView> {
         builder: (context, state) {
           if (state.isLoginSuccess == true) {
             Future.microtask(
-              () => Navigator.pushReplacement(context,
-                  SlideRightRoute(page: HomeProvider())),
+              () => Navigator.pushReplacement(
+                  context, SlideRightRoute(page: HomeProvider())),
             );
           }
           if (state.isRegSuccess == true) {
             Future.microtask(
-                  () => Navigator.pushReplacement(context,
-                  SlideRightRoute(page: IntroView())),
+              () => Navigator.pushReplacement(
+                  context, SlideRightRoute(page: IntroView())),
             );
           }
           if (state!.error!.length > 1) {
-            return Scaffold(body: alert,backgroundColor: Colors.white,);
+            return Scaffold(
+              body: alert,
+              backgroundColor: Colors.white,
+            );
           }
           return DefaultTabController(
             length: 2,
@@ -240,93 +238,94 @@ class _LoginViewState extends State<LoginView> {
                     )
                   else
                     ListView(
-                    shrinkWrap: true,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Form(
-                        key: _loginKey,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: emailField,
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: passwordField,
-                            ),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Text(
-                                    "Forgot password?",
-                                    style: TextStyle(
-                                      color: Colors.blue,
+                      shrinkWrap: true,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Form(
+                          key: _loginKey,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: emailField,
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: passwordField,
+                              ),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Text(
+                                      "Forgot password?",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
-                              child: SafeArea(
-                                child: Container(
-                                  height: 50.0,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (_loginKey.currentState!.validate()) {
-                                        loginUser();
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      foregroundColor: Colors.white,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          side: BorderSide(
-                                              color: Colors.blueAccent
-                                                  .withOpacity(0.7))),
-                                    ),
-                                    child: Text(
-                                      'Sign in',
-                                      style: TextStyle(
-                                          color: Colors.blueAccent,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: "Mulish"),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
+                                child: SafeArea(
+                                  child: Container(
+                                    height: 50.0,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        if (_loginKey.currentState!
+                                            .validate()) {
+                                          loginUser();
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        foregroundColor: Colors.white,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            side: BorderSide(
+                                                color: Colors.blueAccent
+                                                    .withOpacity(0.7))),
+                                      ),
+                                      child: Text(
+                                        'Sign in',
+                                        style: TextStyle(
+                                            color: Colors.blueAccent,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: "Mulish"),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                   if (state.isLoading == true)
                     Center(
                       child: Lottie.asset(
@@ -350,7 +349,7 @@ class _LoginViewState extends State<LoginView> {
                               ),
                               Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 20),
+                                    const EdgeInsets.symmetric(horizontal: 20),
                                 child: firstNameField,
                               ),
                               SizedBox(
@@ -358,7 +357,7 @@ class _LoginViewState extends State<LoginView> {
                               ),
                               Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 20),
+                                    const EdgeInsets.symmetric(horizontal: 20),
                                 child: lastNameField,
                               ),
                               SizedBox(
@@ -437,9 +436,7 @@ class _LoginViewState extends State<LoginView> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: InkWell(
-                                  onTap: () {
-
-                                  },
+                                  onTap: () {},
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(

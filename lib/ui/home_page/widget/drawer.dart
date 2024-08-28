@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/db/auth/authentication.dart';
-import 'package:travel_app/ui/root_page/sub_page/login_provider.dart';
+import 'package:travel_app/ui/login_page/login_view.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import '../home_provider.dart';
@@ -203,7 +203,7 @@ class DrawerHome extends StatelessWidget {
                         () => Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginProvider())),
+                                builder: (context) => LoginView())),
                       );
                     },
                     child: Padding(
