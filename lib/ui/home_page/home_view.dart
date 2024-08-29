@@ -145,7 +145,7 @@ class _HomeViewState extends State<HomeView> {
                             fontFamily: "Avenir LT Std",
                             fontWeight: FontWeight.w300,
                             color: Colors.black),
-                        prefixIcon: state.searchList?.posts.isNotEmpty == true
+                        prefixIcon: state.searchList?.isNotEmpty == true
                             ? Padding(
                                 padding: const EdgeInsets.only(
                                     right: 2.0, top: 5, bottom: 5, left: 2),
@@ -210,7 +210,7 @@ class _HomeViewState extends State<HomeView> {
                           ],
                         ),
                       ),
-                      state.searchList!.posts.length > 0
+                      state.searchList!.length > 0
                           ? Container()
                           : state.hotelList!.length > 0
                               ? Column(
@@ -240,8 +240,8 @@ class _HomeViewState extends State<HomeView> {
                       state.isSearching ?? false
                           ? Center(child: CupertinoActivityIndicator())
                           : Container(),
-                      for (final e in state.searchList!.posts.length > 0
-                          ? state.searchList!.posts
+                      for (final e in state.searchList!.length > 0
+                          ? state.searchList!
                           : state.attractionList!)
                         TravelCart(
                           title: e.title,

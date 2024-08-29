@@ -4,32 +4,9 @@
 
 import 'dart:convert';
 
-Attraction attractionFromJson(String str) => Attraction.fromJson(json.decode(str));
-
-String attractionToJson(Attraction data) => json.encode(data.toJson());
 
 class Attraction {
   Attraction({
-     required this.posts,
-    required this.totalItems,
-  });
-
-  List<Post> posts;
-  int totalItems;
-
-  factory Attraction.fromJson(Map<String, dynamic> json) => Attraction(
-    posts: List<Post>.from(json["posts"].map((x) => Post.fromJson(x))),
-    totalItems: json["totalItems"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "posts": List<dynamic>.from(posts.map((x) => x.toJson())),
-    "totalItems": totalItems,
-  };
-}
-
-class Post {
-  Post({
     required this.description,
     required this.district,
     required this.images,
@@ -47,7 +24,7 @@ class Post {
   String title;
   String youtubeId;
 
-  factory Post.fromJson(Map<String, dynamic> json) => Post(
+  factory Attraction.fromJson(Map<String, dynamic> json) => Attraction(
     description: json["Description"],
     district: json["District"],
     images: List<String>.from(json["Images"].map((x) => x)),

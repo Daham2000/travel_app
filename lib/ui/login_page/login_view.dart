@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:travel_app/db/auth/authentication.dart';
+import 'package:travel_app/db/model/user.dart';
+import 'package:travel_app/db/repository/user_api.dart';
 import 'package:travel_app/ui/home_page/home_provider.dart';
 import 'package:travel_app/ui/login_page/login_bloc.dart';
 import 'package:travel_app/ui/login_page/login_state.dart';
@@ -34,6 +36,7 @@ class _LoginViewState extends State<LoginView> {
   String? password;
   final _formKey = GlobalKey<FormState>();
   final _loginKey = GlobalKey<FormState>();
+  final UserRepository userRepository = UserRepository();
 
   @override
   void initState() {
@@ -43,6 +46,7 @@ class _LoginViewState extends State<LoginView> {
   void loginUser() async {
     await Authentication()
         .login(email: emailCtrl.value.text, password: passCtrl.value.text);
+
     Future.microtask(
       () => Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeProvider())),
@@ -52,8 +56,12 @@ class _LoginViewState extends State<LoginView> {
   void registerUser() async {
     await Authentication().registerUser(
         email: emailCtrl.value.text, password: passCtrl.value.text);
+    await userRepository.addUser(User(
+        email: emailCtrl.value.text,
+        firstName: firstNameCtrl.text,
+        lastName: lastNameCtrl.text));
     Future.microtask(
-          () => Navigator.pushReplacement(
+      () => Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeProvider())),
     );
   }

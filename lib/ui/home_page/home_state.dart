@@ -12,7 +12,7 @@ import 'package:travel_app/db/model/hotel.dart';
 class HomeState {
   final String? error;
   final List? attractionList;
-  final Attraction? searchList;
+  final List? searchList;
   final List? hotelList;
   final List? attractionListTwo;
   final bool? isSearching;
@@ -51,7 +51,7 @@ class HomeState {
   HomeState clone({
     String? error,
     List? attractionList,
-    Attraction? searchList,
+    List? searchList,
     List? hotelList,
     List? attractionListTwo,
     bool? isSearching,
@@ -77,7 +77,7 @@ class HomeState {
   static HomeState get initialState => HomeState(
         error: null,
         attractionList: [],
-        searchList: Attraction(posts: [], totalItems: 0),
+        searchList: [],
         hotelList: [],
         attractionListTwo: null,
         isSearching: false,
