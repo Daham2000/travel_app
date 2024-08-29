@@ -10,8 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:travel_app/db/model/hotel.dart';
-import 'package:travel_app/ui/root_page/root_bloc.dart';
-import 'package:travel_app/ui/root_page/root_state.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import 'home_bloc.dart';
@@ -31,14 +29,11 @@ class _HomeViewState extends State<HomeView> {
   final searchController = TextEditingController();
   ScrollController listController = ScrollController();
   String version = "loading...";
-  late RootBloc rootBloc;
 
   @override
   void initState() {
     super.initState();
     getAppVersion();
-    homeBloc = BlocProvider.of<HomeBloc>(context);
-    rootBloc = BlocProvider.of<RootBloc>(context);
     listController.addListener(_scrollListener);
   }
 
@@ -65,6 +60,10 @@ class _HomeViewState extends State<HomeView> {
             pre.isUpdated != current.isUpdated ||
             pre.searchList != current.searchList,
         builder: (context, state) {
+          if (state.attractionList!.isEmpty) {
+            homeBloc = BlocProvider.of<HomeBloc>(context);
+            homeBloc.add(GetHotelList());
+          }
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: PreferredSize(
@@ -89,30 +88,32 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 20.0, top: 0.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              "Discover",
-                              style: TextStyle(
-                                fontSize: 26.0,
-                                color: Colors.white,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Text(
+                                "Discover",
+                                style: TextStyle(
+                                  fontSize: 26.0,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: 80.0,
-                              child: RichText(
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                text: TextSpan(
-                                  text: "World's top travel places",
-                                  style: TextStyle(
-                                    fontSize: 10.0,
-                                    color: Colors.white,
+                              Container(
+                                width: 80.0,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  text: TextSpan(
+                                    text: "World's top travel places",
+                                    style: TextStyle(
+                                      fontSize: 10.0,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -177,7 +178,7 @@ class _HomeViewState extends State<HomeView> {
                             borderSide: new BorderSide(color: Colors.grey)),
                       ),
                       onChanged: (query) {
-                        homeBloc.searchAttraction(query);
+                        // homeBloc.searchAttraction(query);
                       },
                     ),
                   ),
@@ -195,9 +196,7 @@ class _HomeViewState extends State<HomeView> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 19,
-                          vertical: 10.0
-                        ),
+                            horizontal: 19, vertical: 10.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -212,38 +211,50 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                       state.searchList!.posts.length > 0
-                          ? Container() : state.hotelList!.hotels.length>0 ? Column(
-                        children: [
-                          for (int i = 0; i < 2; i++)
-                            i==2? Container(): TravelCart(
-                              title: state.hotelList!.hotels[i].title,
-                              img: state.hotelList!.hotels[i].images[0],
-                              isAd:true,
-                              url: state.hotelList!.hotels[i].link,
-                              description: "",
-                              shortDetails: "",
-                              youtubeID: "",
-                              district:  state.hotelList!.hotels[i].district,
-                              latLng: [], hotelModel: HotelModel(hotels: [], totalItems: 0), rate: 0,
-                            ),
-                        ],
-                      ) : Container(),
-                      state.isSearching ?? false ?
-                          Center(child: CupertinoActivityIndicator())
+                          ? Container()
+                          : state.hotelList!.length > 0
+                              ? Column(
+                                  children: [
+                                    for (int i = 0; i < 2; i++)
+                                      i == 2
+                                          ? Container()
+                                          : TravelCart(
+                                              title: state.hotelList![i].title,
+                                              img:
+                                                  state.hotelList![i].images[0],
+                                              isAd: true,
+                                              url: state.hotelList![i].link,
+                                              description: "",
+                                              shortDetails: "",
+                                              youtubeID: "",
+                                              district:
+                                                  state.hotelList![i].district,
+                                              latLng: [],
+                                              hotelModel: HotelModel(
+                                                  hotels: [], totalItems: 0),
+                                              rate: 0,
+                                            ),
+                                  ],
+                                )
+                              : Container(),
+                      state.isSearching ?? false
+                          ? Center(child: CupertinoActivityIndicator())
                           : Container(),
                       for (final e in state.searchList!.posts.length > 0
                           ? state.searchList!.posts
-                          : state.attractionList!.posts)
+                          : state.attractionList!)
                         TravelCart(
                           title: e.title,
                           img: e.images[0],
-                          isAd:false,
+                          isAd: false,
                           description: e.description,
                           shortDetails: e.shortDetail,
                           youtubeID: e.youtubeId,
                           district: e.district,
                           latLng: e.latLng,
-                          hotelModel: new HotelModel(hotels: [], totalItems: 0), url: '', rate: 0,
+                          hotelModel: new HotelModel(hotels: [], totalItems: 0),
+                          url: '',
+                          rate: 0,
                         ),
                     ],
                   )

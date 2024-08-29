@@ -11,10 +11,10 @@ import 'home_bloc.dart';
 import 'home_view.dart';
 
 class HomeProvider extends BlocProvider<HomeBloc> {
-  HomeProvider({Key? key,String? miv})
+  HomeProvider({Key? key})
       : super(
           key: key,
-          create: (context) => HomeBloc(context,miv: miv ?? ""),
+          create: (context) => HomeBloc(context),
           child: HomeView(),
         );
 }

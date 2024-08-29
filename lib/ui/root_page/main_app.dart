@@ -7,9 +7,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/db/auth/authentication.dart';
+import 'package:travel_app/ui/home_page/home_provider.dart';
+import 'package:travel_app/ui/login_page/login_provider.dart';
 import 'package:travel_app/ui/login_page/login_view.dart';
-import 'root_bloc.dart';
-import 'root_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class MainApp extends StatelessWidget {
@@ -28,19 +28,14 @@ class MainApp extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData && snapshot.data != null) {
             // User is signed in
-            return RootProvider();
+            return HomeProvider();
           } else {
             // No user is signed in
-            return LoginView();
+            return LoginProvider();
           }
         },
       ),
     );
-    return MultiBlocProvider(
-      providers: <BlocProvider>[
-        BlocProvider<RootBloc>(create: (context) => RootBloc(context)),
-      ],
-      child: materialApp,
-    );
+    return materialApp;
   }
 }

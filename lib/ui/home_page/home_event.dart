@@ -23,11 +23,7 @@ class SearchDocument extends HomeEvent {
   SearchDocument(this.searchingList);
 }
 
-class GetHotelList extends HomeEvent {
-  final HotelModel hotelModel;
-
-  GetHotelList(this.hotelModel);
-}
+class GetHotelList extends HomeEvent {}
 
 class LoadingEvent extends HomeEvent {
   final bool isSearching;
@@ -35,6 +31,4 @@ class LoadingEvent extends HomeEvent {
   LoadingEvent(this.isSearching);
 }
 
-class ClearSearchResult extends HomeEvent{
-
-}
+class ClearSearchResult extends HomeEvent {}

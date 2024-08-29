@@ -11,9 +11,9 @@ import 'package:travel_app/db/model/hotel.dart';
 @immutable
 class HomeState {
   final String? error;
-  final Attraction? attractionList;
+  final List? attractionList;
   final Attraction? searchList;
-  final HotelModel? hotelList;
+  final List? hotelList;
   final List? attractionListTwo;
   final bool? isSearching;
   final int? page;
@@ -50,9 +50,9 @@ class HomeState {
 
   HomeState clone({
     String? error,
-    Attraction? attractionList,
+    List? attractionList,
     Attraction? searchList,
-    HotelModel? hotelList,
+    List? hotelList,
     List? attractionListTwo,
     bool? isSearching,
     bool? moreSearching,
@@ -76,9 +76,9 @@ class HomeState {
 
   static HomeState get initialState => HomeState(
         error: null,
-        attractionList: Attraction(posts: [], totalItems: 0),
+        attractionList: [],
         searchList: Attraction(posts: [], totalItems: 0),
-        hotelList: HotelModel(hotels: [], totalItems: 0),
+        hotelList: [],
         attractionListTwo: null,
         isSearching: false,
         isUpdated: false,

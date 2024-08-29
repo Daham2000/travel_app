@@ -9,15 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:travel_app/db/auth/authentication.dart';
 import 'package:travel_app/ui/home_page/home_provider.dart';
-import 'package:travel_app/ui/intro_page/intro_view.dart';
-import 'package:travel_app/ui/root_page/root_view.dart';
+import 'package:travel_app/ui/login_page/login_bloc.dart';
+import 'package:travel_app/ui/login_page/login_state.dart';
 import 'package:travel_app/ui/root_page/widget/input_decoration.dart';
 import 'package:travel_app/utill/image_assets.dart';
-import 'package:travel_app/utill/transitions.dart';
-
-import '../root_page/root_bloc.dart';
-import '../root_page/root_event.dart';
-import '../root_page/root_state.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({
@@ -49,16 +44,18 @@ class _LoginViewState extends State<LoginView> {
     await Authentication()
         .login(email: emailCtrl.value.text, password: passCtrl.value.text);
     Future.microtask(
-          () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => RootView())),
+      () => Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeProvider())),
     );
   }
 
   void registerUser() async {
     await Authentication().registerUser(
         email: emailCtrl.value.text, password: passCtrl.value.text);
+    Future.microtask(
+          () => Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeProvider())),
+    );
   }
 
   @override
@@ -161,75 +158,53 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
 
-    return BlocBuilder<RootBloc, RootState>(
-        buildWhen: (pre, current) =>
-            pre.error != current.error ||
-            pre.isLoading != current.isLoading ||
-            pre.isRegSuccess != current.isRegSuccess ||
-            pre.isLoginSuccess != current.isLoginSuccess,
-        builder: (context, state) {
-          if (state.isLoginSuccess == true) {
-            Future.microtask(
-              () => Navigator.pushReplacement(
-                  context, SlideRightRoute(page: HomeProvider())),
-            );
-          }
-          if (state.isRegSuccess == true) {
-            Future.microtask(
-              () => Navigator.pushReplacement(
-                  context, SlideRightRoute(page: IntroView())),
-            );
-          }
-          if (state!.error!.length > 1) {
-            return Scaffold(
-              body: alert,
-              backgroundColor: Colors.white,
-            );
-          }
-          return DefaultTabController(
-            length: 2,
-            child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: AppBar(
-                toolbarHeight: 120.0,
-                flexibleSpace: Image(
-                  image: AssetImage(ImageAssets.background),
-                  fit: BoxFit.cover,
-                ),
-                leading: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, top: 10),
-                      child: Image.asset(
-                        ImageAssets.secondLogoPath,
-                        width: 150,
-                      ),
-                    ),
-                  ],
-                ),
-                bottom: const TabBar(
-                  tabs: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.0),
-                      child: Text(
-                        "Sign in",
-                        style: TextStyle(color: Colors.white, fontSize: 15.0),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.0),
-                      child: Text(
-                        "Sign up",
-                        style: TextStyle(color: Colors.white, fontSize: 15.0),
-                      ),
-                    ),
-                  ],
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          toolbarHeight: 120.0,
+          flexibleSpace: Image(
+            image: AssetImage(ImageAssets.background),
+            fit: BoxFit.cover,
+          ),
+          leading: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 10),
+                child: Image.asset(
+                  ImageAssets.secondLogoPath,
+                  width: 150,
                 ),
               ),
-              body: TabBarView(
+            ],
+          ),
+          bottom: const TabBar(
+            tabs: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Text(
+                  "Sign in",
+                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Text(
+                  "Sign up",
+                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                ),
+              ),
+            ],
+          ),
+        ),
+        body: BlocBuilder<LoginBloc, LoginState>(
+            buildWhen: (pre, current) => pre.isSearching != current.isSearching,
+            builder: (context, state) {
+              return TabBarView(
                 children: [
-                  if (state.isLoading == true)
+                  if (state.isSearching == true)
                     Center(
                       child: Lottie.asset(
                         ImageAssets.loaderPath,
@@ -326,7 +301,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ],
                     ),
-                  if (state.isLoading == true)
+                  if (state.isSearching == true)
                     Center(
                       child: Lottie.asset(
                         ImageAssets.loaderPath,
@@ -450,9 +425,9 @@ class _LoginViewState extends State<LoginView> {
                       ],
                     ),
                 ],
-              ),
-            ),
-          );
-        });
+              );
+            }),
+      ),
+    );
   }
 }
