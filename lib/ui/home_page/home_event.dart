@@ -6,7 +6,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:travel_app/db/model/attraction.dart';
-import 'package:travel_app/db/model/hotel.dart';
 
 @immutable
 abstract class HomeEvent {}

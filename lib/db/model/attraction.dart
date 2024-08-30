@@ -2,8 +2,6 @@
 //
 //     final attraction = attractionFromJson(jsonString);
 
-import 'dart:convert';
-
 
 class Attraction {
   Attraction({

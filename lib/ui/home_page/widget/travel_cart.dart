@@ -7,7 +7,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/db/model/hotel.dart';
 import 'package:travel_app/utill/transitions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -40,7 +39,8 @@ class TravelCart extends StatelessWidget {
       required this.district});
 
   void _launchURL() async {
-    if (!await launch(this.url)) throw 'Could not launch ${this.url}';
+    if (!await launchUrl(Uri(path: this.url)))
+      throw 'Could not launch ${this.url}';
   }
 
   @override

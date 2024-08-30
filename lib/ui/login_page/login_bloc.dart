@@ -9,14 +9,4 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   static LoginState get initialState => LoginState(
         isSearching: false,
       );
-
-  @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    switch (event.runtimeType) {
-      case UpdateLoadingState:
-        final data = event as UpdateLoadingState;
-        yield state.clone(isSearching: !data.isLoading);
-        break;
-    }
-  }
 }

@@ -5,11 +5,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/db/auth/authentication.dart';
 import 'package:travel_app/ui/home_page/home_provider.dart';
 import 'package:travel_app/ui/login_page/login_provider.dart';
-import 'package:travel_app/ui/login_page/login_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class MainApp extends StatelessWidget {

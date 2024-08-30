@@ -68,28 +68,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final alert = AlertDialog(
-      content: Container(
-        width: 150,
-        child: Text("Try again..."),
-      ),
-      title: Text(
-        "Login Failed...",
-        style: TextStyle(
-          color: Colors.indigoAccent,
-        ),
-      ),
-      actions: [
-        InkWell(
-          onTap: () {},
-          child: Text(
-            "Try again",
-            style: TextStyle(color: Colors.blueAccent),
-          ),
-        )
-      ],
-    );
-
     final firstNameField = new TextFormField(
       controller: firstNameCtrl,
       style: TextStyle(
@@ -154,7 +132,7 @@ class _LoginViewState extends State<LoginView> {
       validator: (value) {
         if (value!.isEmpty) {
           return 'Please input the password';
-        } else if (value!.length < 6) {
+        } else if (value.length < 6) {
           return 'Please input at least 6 characters';
         } else {
           password = value;
