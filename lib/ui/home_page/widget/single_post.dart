@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:themed/themed.dart';
-import 'package:travel_app/db/model/hotel.dart';
 import 'package:travel_app/utill/manage_hotel_number.dart';
 import 'package:travel_app/utill/styled_colors.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -18,9 +17,8 @@ import 'travel_cart.dart';
 
 class SinglePost extends StatefulWidget {
   final TravelCart travelCart;
-  final List<Hotel> hotelModel;
 
-  SinglePost({required this.travelCart, required this.hotelModel});
+  SinglePost({required this.travelCart});
 
   @override
   _SinglePostState createState() => _SinglePostState();
@@ -37,23 +35,22 @@ class _SinglePostState extends State<SinglePost> {
     super.initState();
     getNumber();
     saveNumber();
-    _controller = YoutubePlayerController(
-      params: YoutubePlayerParams(
-        showControls: true,
-        showFullscreenButton: true,
-      ),
+    _controller = YoutubePlayerController.fromVideoId(
+      videoId: widget.travelCart.youtubeID,
+      autoPlay: true,
+      params: const YoutubePlayerParams(showFullscreenButton: true),
     );
   }
 
-  void getNumber()async{
+  void getNumber() async {
     final int num = await ManageHotelNumber().getNumber();
     setState(() {
       this.hotelNumber = num;
     });
-    print("hotelNumber: "+hotelNumber.toString());
+    print("hotelNumber: " + hotelNumber.toString());
   }
 
-  void saveNumber()async{
+  void saveNumber() async {
     ManageHotelNumber().saveNumber();
   }
 
@@ -73,21 +70,20 @@ class _SinglePostState extends State<SinglePost> {
           child: AppBar(
             backgroundColor: Colors.white,
             flexibleSpace: ChangeColors(
-            hue: 0.0001,
-            brightness: -0.2,
-            saturation: 0.0001,
-            child: CachedNetworkImage(
-              imageUrl: widget.travelCart.img,
-              fit: BoxFit.fill,),
-          ),
+              hue: 0.0001,
+              brightness: -0.2,
+              saturation: 0.0001,
+              child: CachedNetworkImage(
+                imageUrl: widget.travelCart.img,
+                fit: BoxFit.fill,
+              ),
+            ),
             elevation: 10,
             centerTitle: true,
             title: Text(
               "Trip information",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500
-              ),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
             ),
             leading: InkWell(
               onTap: () {
@@ -101,8 +97,8 @@ class _SinglePostState extends State<SinglePost> {
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(25.0),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 15, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                 child: Row(
                   children: [
                     Text(
@@ -164,48 +160,27 @@ class _SinglePostState extends State<SinglePost> {
                           height: 15,
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: StyledColor.ADD_ICON_COLOR,
-                              elevation: 1.0,
-                            ),
-                            onPressed: (){
-                              showDialog(context: context, builder: (BuildContext context){
-                                return AlertDialog(
-                                  title: Text("This page is under developing"),
-                                );
-                              });
-                            },
-                            child: Text(
-                              "Add to a trip plan",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: StyledColor.GREEN_BTN,
                               elevation: 1.0,
                             ),
-                            onPressed: (){
+                            onPressed: () {
                               // Navigator.push(
                               //     context,
                               //     MaterialPageRoute(
                               //         builder: (context) => LocationView(
                               //           latLng: widget.travelCart.latLng,
                               //         )));
-                              showDialog(context: context, builder: (BuildContext context){
-                                return AlertDialog(
-                                  title: Text("This page is under developing"),
-                                );
-                              });
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title:
+                                          Text("This page is under developing"),
+                                    );
+                                  });
                             },
                             child: Text(
                               "Click to view location on map",
@@ -223,20 +198,10 @@ class _SinglePostState extends State<SinglePost> {
                         YoutubePlayer(
                           controller: _controller,
                           aspectRatio: 16 / 9,
+                          enableFullScreenOnVerticalDrag: true,
                         ),
                         SizedBox(
                           height: 15,
-                        ),
-                        TravelCart(
-                          title: widget.hotelModel.length > 0 ? widget.hotelModel[this.hotelNumber].title : "",
-                          img: widget.hotelModel.length > 0 ? widget.hotelModel[this.hotelNumber].images[0] : "",
-                          isAd:true,
-                          url: widget.hotelModel.length > 0 ? widget.hotelModel[this.hotelNumber].link : "",
-                          description: "",
-                          shortDetails: "",
-                          youtubeID: "",
-                          district: widget.hotelModel.length > 0 ? widget.hotelModel[this.hotelNumber].district : "",
-                          latLng: [], rate: 0, hotelModel: [],
                         ),
                         SizedBox(
                           height: 15,

@@ -44,6 +44,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void loginUser() async {
+    context.read<LoginBloc>().updateLoadingState(true);
     await Authentication()
         .login(email: emailCtrl.value.text, password: passCtrl.value.text);
 
@@ -51,9 +52,11 @@ class _LoginViewState extends State<LoginView> {
       () => Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeProvider())),
     );
+    context.read<LoginBloc>().updateLoadingState(false);
   }
 
   void registerUser() async {
+    context.read<LoginBloc>().updateLoadingState(true);
     await Authentication().registerUser(
         email: emailCtrl.value.text, password: passCtrl.value.text);
     await userRepository.addUser(User(
@@ -64,6 +67,7 @@ class _LoginViewState extends State<LoginView> {
       () => Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeProvider())),
     );
+    context.read<LoginBloc>().updateLoadingState(false);
   }
 
   @override

@@ -54,20 +54,19 @@ class TravelCart extends StatelessWidget {
               context,
               SlideBottomRoute(
                   page: SinglePost(
-                      hotelModel: [],
                       travelCart: new TravelCart(
-                        title: this.title,
-                        description: this.description,
-                        img: this.img,
-                        youtubeID: this.youtubeID,
-                        district: this.district,
-                        latLng: this.latLng,
-                        hotelModel: [],
-                        isAd: false,
-                        url: '',
-                        rate: 0,
-                        shortDetails: '',
-                      ))));
+                title: this.title,
+                description: this.description,
+                img: this.img,
+                youtubeID: this.youtubeID,
+                district: this.district,
+                latLng: this.latLng,
+                hotelModel: [],
+                isAd: false,
+                url: '',
+                rate: 0,
+                shortDetails: '',
+              ))));
         }
       },
       child: Material(

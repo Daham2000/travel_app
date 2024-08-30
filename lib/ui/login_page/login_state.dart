@@ -30,4 +30,5 @@ class LoginState {
   static LoginState get initialState => LoginState(
         isSearching: false,
       );
+
 }

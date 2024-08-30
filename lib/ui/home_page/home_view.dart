@@ -50,7 +50,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-      print("Print: "+ state.attractionList!.length.toString());
+      print("Print: " + state.attractionList!.length.toString());
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: PreferredSize(
@@ -196,31 +196,6 @@ class _HomeViewState extends State<HomeView> {
                       ],
                     ),
                   ),
-                  state.searchList!.length > 0
-                      ? Container()
-                      : state.hotelList!.length > 0
-                          ? Column(
-                              children: [
-                                for (int i = 0; i < 2; i++)
-                                  i == 2
-                                      ? Container()
-                                      : TravelCart(
-                                          title: state.hotelList![i].title,
-                                          img: state.hotelList![i].images[0],
-                                          isAd: true,
-                                          url: state.hotelList![i].link,
-                                          description: "",
-                                          shortDetails: "",
-                                          youtubeID: "",
-                                          district:
-                                              state.hotelList![i].district,
-                                          latLng: [],
-                                          hotelModel: [],
-                                          rate: 0,
-                                        ),
-                              ],
-                            )
-                          : Container(),
                   state.isSearching ?? false
                       ? Center(child: CupertinoActivityIndicator())
                       : Container(),

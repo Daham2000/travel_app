@@ -7,7 +7,7 @@ class LoginProvider extends BlocProvider<LoginBloc> {
   LoginProvider({Key? key})
       : super(
           key: key,
-          create: (context) => LoginBloc(context),
+          create: (context) => LoginBloc(),
           child: LoginView(),
         );
 }
