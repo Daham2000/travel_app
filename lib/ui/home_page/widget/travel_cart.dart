@@ -24,20 +24,20 @@ class TravelCart extends StatelessWidget {
   final String district;
   final String url;
   final List<dynamic> latLng;
-  final HotelModel hotelModel;
+  final List hotelModel;
 
   const TravelCart(
       {required this.latLng,
-        required this.img,
-        required this.isAd,
-        required this.url,
-        required this.rate,
-        required this.title,
-        required this.shortDetails,
-        required this.description,
-        required this.youtubeID,
-        required this.hotelModel,
-        required this.district});
+      required this.img,
+      required this.isAd,
+      required this.url,
+      required this.rate,
+      required this.title,
+      required this.shortDetails,
+      required this.description,
+      required this.youtubeID,
+      required this.hotelModel,
+      required this.district});
 
   void _launchURL() async {
     if (!await launch(this.url)) throw 'Could not launch ${this.url}';
@@ -47,21 +47,26 @@ class TravelCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (isAd){
+        if (isAd) {
           _launchURL();
-        }else{
+        } else {
           Navigator.push(
               context,
               SlideBottomRoute(
                   page: SinglePost(
-                    hotelModel: hotelModel,
+                      hotelModel: [],
                       travelCart: new TravelCart(
                         title: this.title,
                         description: this.description,
                         img: this.img,
                         youtubeID: this.youtubeID,
                         district: this.district,
-                        latLng: this.latLng, hotelModel: HotelModel(hotels: [], totalItems: 0), isAd: false, url: '', rate: 0, shortDetails: '',
+                        latLng: this.latLng,
+                        hotelModel: [],
+                        isAd: false,
+                        url: '',
+                        rate: 0,
+                        shortDetails: '',
                       ))));
         }
       },
@@ -73,8 +78,9 @@ class TravelCart extends StatelessWidget {
             alignment: AlignmentDirectional.center,
             children: [
               Container(
-                width: isAd? MediaQuery.of(context).size.width * 0.81 :
-                MediaQuery.of(context).size.width * 0.73,
+                width: isAd
+                    ? MediaQuery.of(context).size.width * 0.81
+                    : MediaQuery.of(context).size.width * 0.73,
                 height: MediaQuery.of(context).size.width * 0.43,
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -82,33 +88,36 @@ class TravelCart extends StatelessWidget {
                     imageUrl: img,
                     placeholder: (context, url) =>
                         Center(child: CircularProgressIndicator()),
-                    fit: isAd? BoxFit.fill : BoxFit.cover,
+                    fit: isAd ? BoxFit.fill : BoxFit.cover,
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
               ),
-              isAd ? Positioned(
-                top: 10.0,
-                  left: 50.0,
-                  child: Container(
-                width: 20,
-                height: 15,
-                color: Colors.amber,
-                child:Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Text("AD",style: GoogleFonts.mulish(
-                    fontSize: 7.0,
-                    fontWeight: FontWeight.bold
-                  ),
-                  textAlign: TextAlign.center,),
-                )
-              )) : Container(),
+              isAd
+                  ? Positioned(
+                      top: 10.0,
+                      left: 50.0,
+                      child: Container(
+                          width: 20,
+                          height: 15,
+                          color: Colors.amber,
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Text(
+                              "AD",
+                              style: GoogleFonts.mulish(
+                                  fontSize: 7.0, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          )))
+                  : Container(),
               Positioned(
                 bottom: -5.0,
                 child: Container(
-                    height: isAd? 50.0 : 30,
-                    width: isAd? MediaQuery.of(context).size.width * 0.65 :
-                    MediaQuery.of(context).size.width * 0.55,
+                    height: isAd ? 50.0 : 30,
+                    width: isAd
+                        ? MediaQuery.of(context).size.width * 0.65
+                        : MediaQuery.of(context).size.width * 0.55,
                     margin: const EdgeInsets.only(bottom: 6.0),
                     //Same as `blurRadius` i guess
                     decoration: BoxDecoration(
@@ -124,7 +133,7 @@ class TravelCart extends StatelessWidget {
                     )),
               ),
               Positioned(
-                bottom: isAd ? 26.0:10.0,
+                bottom: isAd ? 26.0 : 10.0,
                 left: 50.0,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -137,20 +146,22 @@ class TravelCart extends StatelessWidget {
                   ),
                 ),
               ),
-              isAd? Positioned(
-                bottom: 10.0,
-                left: 50.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    district,
-                    style: GoogleFonts.mulish(
-                      fontSize: 12.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ) : Container(),
+              isAd
+                  ? Positioned(
+                      bottom: 10.0,
+                      left: 50.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          district,
+                          style: GoogleFonts.mulish(
+                            fontSize: 12.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),

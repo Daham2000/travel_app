@@ -4,25 +4,20 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_app/db/repository/attraction_repo.dart';
 
-import 'home_event.dart';
 import 'home_state.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc(BuildContext context) : super(HomeState.initialState) {
-    on<GetHotelList>((event, emit) async {
-      state.clone(attractionList: []);
-    });
-    on<LoadingEvent>((event, emit) async {
-      state.clone(isSearching: event.isSearching);
-    });
-  }
+class HomeBloc extends Cubit<HomeState> {
+  HomeBloc() : super(HomeState.initialState);
 
-  void searchAttraction(String query) async {
-    add(LoadingEvent(true));
-
-    add(LoadingEvent(false));
+  void getAllAttractions() async {
+    emit(state.copyWith(isSearching: true));
+    AttractionRepo attractionRepo = AttractionRepo();
+    final list = await attractionRepo.getALl();
+    print(list.length);
+    emit(state.copyWith(attractionList: list));
+    emit(state.copyWith(isSearching: false));
   }
 }

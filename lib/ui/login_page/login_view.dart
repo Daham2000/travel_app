@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:travel_app/db/auth/authentication.dart';
 import 'package:travel_app/db/model/user.dart';
-import 'package:travel_app/db/repository/user_api.dart';
+import 'package:travel_app/db/repository/user_repo.dart';
 import 'package:travel_app/ui/home_page/home_provider.dart';
 import 'package:travel_app/ui/login_page/login_bloc.dart';
 import 'package:travel_app/ui/login_page/login_state.dart';

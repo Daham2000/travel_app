@@ -19,7 +19,7 @@ import 'travel_cart.dart';
 
 class SinglePost extends StatefulWidget {
   final TravelCart travelCart;
-  final HotelModel hotelModel;
+  final List<Hotel> hotelModel;
 
   SinglePost({required this.travelCart, required this.hotelModel});
 
@@ -229,15 +229,15 @@ class _SinglePostState extends State<SinglePost> {
                           height: 15,
                         ),
                         TravelCart(
-                          title: widget.hotelModel.hotels.length > 0 ? widget.hotelModel.hotels[this.hotelNumber].title : "",
-                          img: widget.hotelModel.hotels.length > 0 ? widget.hotelModel.hotels[this.hotelNumber].images[0] : "",
+                          title: widget.hotelModel.length > 0 ? widget.hotelModel[this.hotelNumber].title : "",
+                          img: widget.hotelModel.length > 0 ? widget.hotelModel[this.hotelNumber].images[0] : "",
                           isAd:true,
-                          url: widget.hotelModel.hotels.length > 0 ? widget.hotelModel.hotels[this.hotelNumber].link : "",
+                          url: widget.hotelModel.length > 0 ? widget.hotelModel[this.hotelNumber].link : "",
                           description: "",
                           shortDetails: "",
                           youtubeID: "",
-                          district: widget.hotelModel.hotels.length > 0 ? widget.hotelModel.hotels[this.hotelNumber].district : "",
-                          latLng: [], rate: 0, hotelModel: HotelModel(hotels: [], totalItems: 0),
+                          district: widget.hotelModel.length > 0 ? widget.hotelModel[this.hotelNumber].district : "",
+                          latLng: [], rate: 0, hotelModel: [],
                         ),
                         SizedBox(
                           height: 15,
