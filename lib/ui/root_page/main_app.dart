@@ -19,19 +19,22 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FutureBuilder<User?>(
-        future: Authentication().getLoggedUser(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasData && snapshot.data != null) {
-            // User is signed in
-            return HomeProvider();
-          } else {
-            // No user is signed in
-            return LoginProvider();
-          }
-        },
+      home: GestureDetector(
+        onTap: () => {FocusScope.of(context).requestFocus(new FocusNode())},
+        child: FutureBuilder<User?>(
+          future: Authentication().getLoggedUser(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasData && snapshot.data != null) {
+              // User is signed in
+              return HomeProvider();
+            } else {
+              // No user is signed in
+              return LoginProvider();
+            }
+          },
+        ),
       ),
     );
     return materialApp;

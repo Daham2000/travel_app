@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import 'home_bloc.dart';
@@ -25,14 +24,13 @@ class _HomeViewState extends State<HomeView> {
   // ignore: close_sinks
   final searchController = TextEditingController();
   ScrollController listController = ScrollController();
-  String version = "loading...";
 
   @override
   void initState() {
     super.initState();
-    getAppVersion();
     listController.addListener(_scrollListener);
     context.read<HomeBloc>().getAllAttractions();
+    context.read<HomeBloc>().getAppVersion();
   }
 
   void _scrollListener() {
@@ -42,15 +40,9 @@ class _HomeViewState extends State<HomeView> {
     // }
   }
 
-  Future<void> getAppVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    version = packageInfo.version;
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-      print("Print: " + state.attractionList!.length.toString());
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: PreferredSize(
@@ -172,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
         drawer: DrawerHome(
-          version: version,
+          version: state.version ?? "",
         ),
         body: Stack(
           children: [

@@ -45,28 +45,31 @@ class _LoginViewState extends State<LoginView> {
 
   void loginUser() async {
     context.read<LoginBloc>().updateLoadingState(true);
-    await Authentication()
+    final userCredential = await Authentication()
         .login(email: emailCtrl.value.text, password: passCtrl.value.text);
-
-    Future.microtask(
-      () => Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomeProvider())),
-    );
+    if (userCredential?.user != null) {
+      Future.microtask(
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomeProvider())),
+      );
+    }
     context.read<LoginBloc>().updateLoadingState(false);
   }
 
   void registerUser() async {
     context.read<LoginBloc>().updateLoadingState(true);
-    await Authentication().registerUser(
+    final userCredential = await Authentication().registerUser(
         email: emailCtrl.value.text, password: passCtrl.value.text);
-    await userRepository.addUser(User(
-        email: emailCtrl.value.text,
-        firstName: firstNameCtrl.text,
-        lastName: lastNameCtrl.text));
-    Future.microtask(
-      () => Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomeProvider())),
-    );
+    if (userCredential?.user == null) {
+      await userRepository.addUser(User(
+          email: emailCtrl.value.text,
+          firstName: firstNameCtrl.text,
+          lastName: lastNameCtrl.text));
+      Future.microtask(
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomeProvider())),
+      );
+    }
     context.read<LoginBloc>().updateLoadingState(false);
   }
 

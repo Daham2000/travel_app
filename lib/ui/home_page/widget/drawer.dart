@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/db/auth/authentication.dart';
-import 'package:travel_app/ui/login_page/login_view.dart';
+import 'package:travel_app/ui/login_page/login_provider.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import '../home_provider.dart';
@@ -96,7 +96,7 @@ class DrawerHome extends StatelessWidget {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 16),
+                      padding: const EdgeInsets.only(left: 15, bottom: 16),
                       child: Row(
                         children: [
                           Icon(
@@ -115,87 +115,6 @@ class DrawerHome extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {
-                      showDialog(context: context, builder: (BuildContext context){
-                        return AlertDialog(
-                          title: Text("This page is under developing"),
-                        );
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 16),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            ImageAssets.travelIcon,
-                            width: 20,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "My plans",
-                            style: TextStyle(color: Colors.black),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      showDialog(context: context, builder: (BuildContext context){
-                        return AlertDialog(
-                          title: Text("This page is under developing"),
-                        );
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 16),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            ImageAssets.settingsIcon,
-                            width: 20,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "Settings",
-                            style: TextStyle(color: Colors.black),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      showDialog(context: context, builder: (BuildContext context){
-                        return AlertDialog(
-                          title: Text("This page is under developing"),
-                        );
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 16),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            ImageAssets.aboutIcon,
-                            width: 20,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "About",
-                            style: TextStyle(color: Colors.black),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
                     onTap: () async {
                       print("Navigating to Login page...");
                       await Authentication().signOut();
@@ -203,11 +122,11 @@ class DrawerHome extends StatelessWidget {
                         () => Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginView())),
+                                builder: (context) => LoginProvider())),
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 16),
+                      padding: const EdgeInsets.only(left: 15, bottom: 16),
                       child: Row(
                         children: [
                           SvgPicture.asset(

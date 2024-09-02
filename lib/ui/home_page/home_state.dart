@@ -18,6 +18,7 @@ class HomeState {
   final int? limit;
   final bool? moreSearching;
   final bool? isUpdated;
+  final String? version;
 
   HomeState({
     required this.error,
@@ -30,6 +31,7 @@ class HomeState {
     required this.moreSearching,
     required this.isUpdated,
     required this.hotelList,
+    required this.version,
   });
 
   HomeState copyWith(
@@ -41,6 +43,7 @@ class HomeState {
       bool? isSearching,
       bool? moreSearching,
       bool? isUpdated,
+      String? version,
       int? page,
       int? limit}) {
     return HomeState(
@@ -54,6 +57,7 @@ class HomeState {
       page: page ?? this.page,
       limit: limit ?? this.limit,
       moreSearching: moreSearching ?? this.moreSearching,
+      version: version ?? this.version,
     );
   }
 
@@ -68,5 +72,6 @@ class HomeState {
         page: 1,
         limit: 10,
         moreSearching: false,
+        version: "",
       );
 }
