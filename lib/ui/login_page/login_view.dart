@@ -15,7 +15,7 @@ import 'package:travel_app/ui/login_page/login_bloc.dart';
 import 'package:travel_app/ui/login_page/login_state.dart';
 import 'package:travel_app/ui/root_page/widget/input_decoration.dart';
 import 'package:travel_app/utill/image_assets.dart';
-
+import 'package:toastification/toastification.dart';
 class LoginView extends StatefulWidget {
   const LoginView({
     Key? key,
@@ -48,9 +48,22 @@ class _LoginViewState extends State<LoginView> {
     final userCredential = await Authentication()
         .login(email: emailCtrl.value.text, password: passCtrl.value.text);
     if (userCredential?.user != null) {
+      toastification.show(
+        context: context,
+        type: ToastificationType.success,
+        title: Text('Login Success, Loading...'),
+        autoCloseDuration: const Duration(seconds: 5),
+      );
       Future.microtask(
         () => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeProvider())),
+      );
+    } else {
+      toastification.show(
+        context: context,
+        type: ToastificationType.error,
+        title: Text('Incorrect Email or Password.'),
+        autoCloseDuration: const Duration(seconds: 5),
       );
     }
     context.read<LoginBloc>().updateLoadingState(false);
@@ -60,7 +73,13 @@ class _LoginViewState extends State<LoginView> {
     context.read<LoginBloc>().updateLoadingState(true);
     final userCredential = await Authentication().registerUser(
         email: emailCtrl.value.text, password: passCtrl.value.text);
-    if (userCredential?.user == null) {
+    if (userCredential?.user != null) {
+      toastification.show(
+        context: context,
+        type: ToastificationType.success,
+        title: Text('User Registration Success, Loading...'),
+        autoCloseDuration: const Duration(seconds: 5),
+      );
       await userRepository.addUser(User(
           email: emailCtrl.value.text,
           firstName: firstNameCtrl.text,
@@ -68,6 +87,13 @@ class _LoginViewState extends State<LoginView> {
       Future.microtask(
         () => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeProvider())),
+      );
+    } else {
+      toastification.show(
+        context: context,
+        type: ToastificationType.error,
+        title: Text('User registration failed, Try again.'),
+        autoCloseDuration: const Duration(seconds: 5),
       );
     }
     context.read<LoginBloc>().updateLoadingState(false);
