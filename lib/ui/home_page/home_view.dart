@@ -156,7 +156,7 @@ class _HomeViewState extends State<HomeView> {
                         borderSide: new BorderSide(color: Colors.grey)),
                   ),
                   onChanged: (query) {
-                    // homeBloc.searchAttraction(query);
+                    context.read<HomeBloc>().getAllAttractionsByName(query);
                   },
                 ),
               ),

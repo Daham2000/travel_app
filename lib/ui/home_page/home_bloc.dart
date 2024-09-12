@@ -21,6 +21,23 @@ class HomeBloc extends Cubit<HomeState> {
     emit(state.copyWith(isSearching: false));
   }
 
+  void runLoader(bool isLoading) async {
+    emit(state.copyWith(isSearching: isLoading));
+  }
+
+  void getAllAttractionsByName(String value) async {
+    emit(state.copyWith(isSearching: true));
+    AttractionRepo attractionRepo = AttractionRepo();
+    var list = [];
+    if(value.length > 0) {
+      list = await attractionRepo.getALlByName(value);
+    } else {
+      list = await attractionRepo.getALl();
+    }
+    emit(state.copyWith(attractionList: list));
+    emit(state.copyWith(isSearching: false));
+  }
+
   Future<void> getAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     emit(state.copyWith(version: packageInfo.version));
