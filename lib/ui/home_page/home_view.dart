@@ -34,10 +34,11 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _scrollListener() {
-    // if (listController.offset >= listController.position.maxScrollExtent &&
-    //     !listController.position.outOfRange) {
-    //   homeBloc.add(GetDataAttractionEvent(list: []));
-    // }
+    if (listController.offset  >= listController.position.maxScrollExtent &&
+        (!listController.position.outOfRange)) {
+      print("load documents with pagination flutter...");
+      context.read<HomeBloc>().getAttractionsWithPagination();
+    }
   }
 
   @override

@@ -12,6 +12,7 @@ import 'home_state.dart';
 
 class HomeBloc extends Cubit<HomeState> {
   HomeBloc() : super(HomeState.initialState);
+  AttractionRepo attractionRepo = AttractionRepo();
 
   void getAllAttractions() async {
     emit(state.copyWith(isSearching: true));
@@ -27,9 +28,8 @@ class HomeBloc extends Cubit<HomeState> {
 
   void getAllAttractionsByName(String value) async {
     emit(state.copyWith(isSearching: true));
-    AttractionRepo attractionRepo = AttractionRepo();
     var list = [];
-    if(value.length > 0) {
+    if (value.length > 0) {
       list = await attractionRepo.getALlByName(value);
     } else {
       list = await attractionRepo.getALl();
@@ -41,5 +41,13 @@ class HomeBloc extends Cubit<HomeState> {
   Future<void> getAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     emit(state.copyWith(version: packageInfo.version));
+  }
+
+  void getAttractionsWithPagination() async {
+    final list = await attractionRepo.loadWithPagination(
+        state.attractionList?[state.attractionList!.length - 1]);
+    final stateList = state.attractionList;
+    stateList?.addAll(list);
+    emit(state.copyWith(attractionList: stateList));
   }
 }

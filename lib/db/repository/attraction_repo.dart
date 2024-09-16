@@ -156,7 +156,7 @@ class AttractionRepo {
 
   Future<List<Attraction>> getALl() async {
     try {
-      QuerySnapshot snapshot = await _attractionCollection.get();
+      QuerySnapshot snapshot = await _attractionCollection.orderBy("Title").limit(5).get();
       return snapshot.docs
           .map((doc) => Attraction.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
@@ -171,6 +171,20 @@ class AttractionRepo {
       QuerySnapshot snapshot = await _attractionCollection.get();
       return snapshot.docs
           .where((c) => c["Title"].toString().toLowerCase().contains(value.toLowerCase())).map(((doc) => Attraction.fromJson(doc.data() as Map<String, dynamic>)))
+          .toList();
+    } catch (e) {
+      print('Error fetching users: $e');
+      throw e;
+    }
+  }
+
+  Future<List<Attraction>> loadWithPagination(Attraction value) async {
+    try {
+      final objectDocument = await _attractionCollection.where("Title", isEqualTo: value.title).limit(1).get();
+      print(objectDocument.docs.length);
+      QuerySnapshot snapshot = await _attractionCollection.orderBy("Title").startAfterDocument(objectDocument.docs[0]).limit(5).get();
+      return snapshot.docs
+          .map((doc) => Attraction.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
     } catch (e) {
       print('Error fetching users: $e');
