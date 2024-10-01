@@ -4,13 +4,16 @@
  *
  */
 
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+// import 'package:maps_launcher/maps_launcher.dart';
 import 'package:themed/themed.dart';
 import 'package:travel_app/utill/manage_hotel_number.dart';
 import 'package:travel_app/utill/styled_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import 'travel_cart.dart';
@@ -57,6 +60,15 @@ class _SinglePostState extends State<SinglePost> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  static Future<void> openMap(double latitude, double longitude) async {
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    if (await canLaunchUrl(Uri.parse(googleUrl))) {
+      await launchUrl(Uri.parse(googleUrl));
+    } else {
+      throw 'Could not open the map.';
+    }
   }
 
   @override
@@ -167,20 +179,9 @@ class _SinglePostState extends State<SinglePost> {
                               elevation: 1.0,
                             ),
                             onPressed: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => LocationView(
-                              //           latLng: widget.travelCart.latLng,
-                              //         )));
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title:
-                                          Text("This page is under developing"),
-                                    );
-                                  });
+                              // MapsLauncher.launchQuery('1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA');
+                              // MapsLauncher.launchCoordinates(37.4220041, -122.0862462);
+                              openMap(double.parse(widget.travelCart.latLng[0]), double.parse(widget.travelCart.latLng[1]));
                             },
                             child: Text(
                               "Click to view location on map",

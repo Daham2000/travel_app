@@ -34,7 +34,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _scrollListener() {
-    if (listController.offset  >= listController.position.maxScrollExtent &&
+    if (listController.offset >= listController.position.maxScrollExtent &&
         (!listController.position.outOfRange)) {
       print("load documents with pagination flutter...");
       context.read<HomeBloc>().getAttractionsWithPagination();
@@ -43,7 +43,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+    return BlocBuilder<HomeBloc, HomeState>(buildWhen: (previous, current) {
+      return previous.isSearching != current.isSearching ||
+          previous.attractionList?.length != current.attractionList?.length;
+    }, builder: (context, state) {
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: PreferredSize(

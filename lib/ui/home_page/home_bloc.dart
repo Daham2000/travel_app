@@ -44,10 +44,11 @@ class HomeBloc extends Cubit<HomeState> {
   }
 
   void getAttractionsWithPagination() async {
+    emit(state.copyWith(isSearching: true));
     final list = await attractionRepo.loadWithPagination(
         state.attractionList?[state.attractionList!.length - 1]);
     final stateList = state.attractionList;
     stateList?.addAll(list);
-    emit(state.copyWith(attractionList: stateList));
+    emit(state.copyWith(attractionList: stateList, isSearching: false));
   }
 }
