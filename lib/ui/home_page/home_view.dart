@@ -87,7 +87,7 @@ class _HomeViewState extends State<HomeView> {
                               textAlign: TextAlign.center,
                               maxLines: 2,
                               text: TextSpan(
-                                text: "World's top travel places",
+                                text: "Sri Lanka's top travel places",
                                 style: TextStyle(
                                   fontSize: 10.0,
                                   color: Colors.white,

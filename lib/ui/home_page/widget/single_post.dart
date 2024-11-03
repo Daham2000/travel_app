@@ -4,13 +4,12 @@
  *
  */
 
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:maps_launcher/maps_launcher.dart';
 import 'package:themed/themed.dart';
+import 'package:travel_app/ui/widgets/commentSectionView.dart';
 import 'package:travel_app/utill/manage_hotel_number.dart';
 import 'package:travel_app/utill/styled_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -62,8 +61,9 @@ class _SinglePostState extends State<SinglePost> {
     super.dispose();
   }
 
-  static Future<void> openMap(double latitude, double longitude) async {
-    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+  static Future<void> openMap(String title) async {
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$title';
     if (await canLaunchUrl(Uri.parse(googleUrl))) {
       await launchUrl(Uri.parse(googleUrl));
     } else {
@@ -172,7 +172,7 @@ class _SinglePostState extends State<SinglePost> {
                           height: 15,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: StyledColor.GREEN_BTN,
@@ -181,10 +181,10 @@ class _SinglePostState extends State<SinglePost> {
                             onPressed: () {
                               // MapsLauncher.launchQuery('1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA');
                               // MapsLauncher.launchCoordinates(37.4220041, -122.0862462);
-                              openMap(double.parse(widget.travelCart.latLng[0]), double.parse(widget.travelCart.latLng[1]));
+                              openMap(widget.travelCart.title);
                             },
                             child: Text(
-                              "Click to view location on map",
+                              "Click to view location on Google Map",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -204,13 +204,29 @@ class _SinglePostState extends State<SinglePost> {
                         SizedBox(
                           height: 15,
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
+                        Divider(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Comments (10)",
+                                  style: TextStyle(fontSize: 20)),
+                              SizedBox(
+                                height: 5,
+                              ),
+
+                              CommentSectionView(),
+                              CommentSectionView(),
+                              CommentSectionView(),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             );
           },

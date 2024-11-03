@@ -59,6 +59,17 @@ class UserRepository {
     }
   }
 
+  Future<List<User>> getUserByEmail(String email) async {
+    try {
+      QuerySnapshot snapshot = await _userCollection.get();
+      return snapshot.docs.where((c) => c["email"].toString().toLowerCase().contains(email.toLowerCase())).map(((doc) => User.fromMap(doc.data() as Map<String, dynamic>)))
+          .toList();
+    } catch (e) {
+      print('Error fetching user: $e');
+      throw e;
+    }
+  }
+
   // Fetch all users from Firestore
   Future<List<User>> getAllUsers() async {
     try {
