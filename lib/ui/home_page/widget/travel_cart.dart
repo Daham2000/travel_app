@@ -7,6 +7,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_app/db/model/comment.dart';
 import 'package:travel_app/utill/transitions.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'single_post.dart';
@@ -23,6 +24,7 @@ class TravelCart extends StatelessWidget {
   final String url;
   final List<dynamic> latLng;
   final List hotelModel;
+  final List<Comment> commnets;
 
   const TravelCart(
       {required this.latLng,
@@ -35,7 +37,7 @@ class TravelCart extends StatelessWidget {
       required this.description,
       required this.youtubeID,
       required this.hotelModel,
-      required this.district});
+      required this.district, required this.commnets});
 
   void _launchURL() async {
     if (!await launchUrl(Uri(path: this.url)))
@@ -64,7 +66,7 @@ class TravelCart extends StatelessWidget {
                 isAd: false,
                 url: '',
                 rate: 0,
-                shortDetails: '',
+                shortDetails: '', commnets: this.commnets,
               ))));
         }
       },

@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/db/model/comment.dart';
 
 class CommentSectionView extends StatelessWidget {
-  const CommentSectionView({super.key});
+  final Comment comment;
+
+  const CommentSectionView({super.key, required this.comment});
+
+  String getTimeGap() {
+    final now = DateTime.now();
+    DateTime date = DateTime.parse(comment.commentTime.toDate().toString());
+    final timeDifferance = now.difference(date);
+    print("timeDifferance: " + timeDifferance.inDays.toString());
+    if (timeDifferance.inDays > 60) {
+      return (timeDifferance.inDays / 7).toString();
+    } else {
+      return timeDifferance.inDays.toString();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,19 +34,20 @@ class CommentSectionView extends StatelessWidget {
                 height: 14,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 5.0),
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Text(
-                  "John Cick",
+                  comment.userName,
                   style: TextStyle(fontSize: 15),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 5.0),
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Text(
-                  "2 minutes ago",
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w100, color: Colors.grey),
+                  getTimeGap() + " minutes ago",
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w100,
+                      color: Colors.grey),
                 ),
               )
             ],
@@ -39,7 +55,7 @@ class CommentSectionView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
-              "Big Ben is the nickname for the Great Bell of the Great Clock of Westminster, and, by extension",
+              comment.commentDescription,
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w200),
             ),
           )

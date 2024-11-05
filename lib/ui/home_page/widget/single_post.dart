@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:themed/themed.dart';
-import 'package:travel_app/ui/widgets/commentSectionView.dart';
+import 'package:travel_app/ui/widgets/comment_section_view.dart';
 import 'package:travel_app/utill/manage_hotel_number.dart';
 import 'package:travel_app/utill/styled_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -62,8 +62,7 @@ class _SinglePostState extends State<SinglePost> {
   }
 
   static Future<void> openMap(String title) async {
-    String googleUrl =
-        'https://www.google.com/maps/search/?api=1&query=$title';
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$title';
     if (await canLaunchUrl(Uri.parse(googleUrl))) {
       await launchUrl(Uri.parse(googleUrl));
     } else {
@@ -216,10 +215,10 @@ class _SinglePostState extends State<SinglePost> {
                               SizedBox(
                                 height: 5,
                               ),
-
-                              CommentSectionView(),
-                              CommentSectionView(),
-                              CommentSectionView(),
+                              for (var i in widget.travelCart.commnets)
+                                CommentSectionView(
+                                  comment: i,
+                                )
                             ],
                           ),
                         )

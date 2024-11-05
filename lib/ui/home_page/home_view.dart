@@ -209,7 +209,7 @@ class _HomeViewState extends State<HomeView> {
                       latLng: e.latLng,
                       hotelModel: [],
                       url: '',
-                      rate: 0,
+                      rate: 0, commnets: e.comments,
                     ),
                 ],
               )

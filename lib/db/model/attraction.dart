@@ -25,7 +25,7 @@ class Attraction {
   String youtubeId;
   List<Comment> comments;
 
-  factory Attraction.fromJson(Map<String, dynamic> json) => Attraction(
+  factory Attraction.fromJson(json) => Attraction(
         description: json["Description"],
         district: json["District"],
         images: List<String>.from(json["Images"].map((x) => x)),
@@ -33,7 +33,7 @@ class Attraction {
         shortDetail: json["ShortDetail"],
         title: json["Title"],
         youtubeId: json["youtubeID"],
-        comments: json["comments"],
+        comments: List<Comment>.from(json["comments"].map((x) => Comment.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -44,6 +44,6 @@ class Attraction {
         "ShortDetail": shortDetail,
         "Title": title,
         "youtubeID": youtubeId,
-        "comments": List<dynamic>.from(comments.map((x) => x)),
+        "comments": List<Comment>.from(comments.map((x) => x.toJson())),
       };
 }
