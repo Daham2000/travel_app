@@ -5,10 +5,15 @@
  */
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:themed/themed.dart';
+import 'package:travel_app/db/model/attraction.dart';
+import 'package:travel_app/db/model/comment.dart';
+import 'package:travel_app/db/repository/attraction_repo.dart';
+import 'package:travel_app/db/repository/user_repo.dart';
 import 'package:travel_app/ui/widgets/comment_section_view.dart';
 import 'package:travel_app/utill/manage_hotel_number.dart';
 import 'package:travel_app/utill/styled_colors.dart';
@@ -19,8 +24,12 @@ import 'travel_cart.dart';
 
 class SinglePost extends StatefulWidget {
   final TravelCart travelCart;
+  final Attraction attraction;
 
-  SinglePost({required this.travelCart});
+  SinglePost({
+    required this.travelCart,
+    required this.attraction,
+  });
 
   @override
   _SinglePostState createState() => _SinglePostState();
@@ -28,9 +37,11 @@ class SinglePost extends StatefulWidget {
 
 class _SinglePostState extends State<SinglePost> {
   // YoutubePlayerController _controller;
-
+  AttractionRepo attractionRepo = AttractionRepo();
   late YoutubePlayerController _controller;
   int hotelNumber = 0;
+  final textCtrl = TextEditingController();
+  String value = "";
 
   @override
   void initState() {
@@ -49,7 +60,6 @@ class _SinglePostState extends State<SinglePost> {
     setState(() {
       this.hotelNumber = num;
     });
-    print("hotelNumber: " + hotelNumber.toString());
   }
 
   void saveNumber() async {
@@ -70,9 +80,27 @@ class _SinglePostState extends State<SinglePost> {
     }
   }
 
+  Future<void> addComment() async {
+    FocusScope.of(context).unfocus();
+    UserRepository userRepository = UserRepository();
+    final user = await userRepository
+        .getUserByEmail(FirebaseAuth.instance.currentUser?.email ?? "");
+    final String name = user.firstName + " " + user.lastName;
+    Comment comment = Comment(
+        userEmail: FirebaseAuth.instance.currentUser?.email ?? "",
+        userName: name,
+        commentDescription: value,
+        commentTime: DateTime.now());
+    setState(() {
+      widget.attraction.comments.add(comment);
+    });
+    attractionRepo.addComment(
+        FirebaseAuth.instance.currentUser?.email, value, widget.attraction);
+    textCtrl.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
-    FocusScope.of(context).unfocus();
     return Material(
       color: Colors.transparent,
       child: Scaffold(
@@ -126,109 +154,130 @@ class _SinglePostState extends State<SinglePost> {
             ),
           ),
         ),
-        body: OrientationBuilder(
-          builder: (BuildContext context, Orientation orientation) {
-            return Stack(
-              children: [
-                Container(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: ListView(
-                      children: [
-                        SizedBox(
-                          height: 4.0,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          child: Text(
-                            "District: " + widget.travelCart.district,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.rubik(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          child: Text(
-                            widget.travelCart.description,
-                            maxLines: 100,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.rubik(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: StyledColor.GREEN_BTN,
-                              elevation: 1.0,
-                            ),
-                            onPressed: () {
-                              // MapsLauncher.launchQuery('1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA');
-                              // MapsLauncher.launchCoordinates(37.4220041, -122.0862462);
-                              openMap(widget.travelCart.title);
-                            },
-                            child: Text(
-                              "Click to view location on Google Map",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        YoutubePlayer(
-                          controller: _controller,
-                          aspectRatio: 16 / 9,
-                          enableFullScreenOnVerticalDrag: true,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Divider(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Comments (10)",
-                                  style: TextStyle(fontSize: 20)),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              for (var i in widget.travelCart.commnets)
-                                CommentSectionView(
-                                  comment: i,
-                                )
-                            ],
-                          ),
-                        )
-                      ],
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  children: [
+                    SizedBox(
+                      height: 4.0,
                     ),
-                  ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: Text(
+                        "District: " + widget.travelCart.district,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.rubik(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: Text(
+                        widget.travelCart.description,
+                        maxLines: 100,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.rubik(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: StyledColor.GREEN_BTN,
+                          elevation: 1.0,
+                        ),
+                        onPressed: () {
+                          openMap(widget.travelCart.title);
+                        },
+                        child: Text(
+                          "Click to view location on Google Map",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Divider(),
+                    YoutubePlayer(
+                      controller: _controller,
+                      aspectRatio: 16 / 9,
+                      enableFullScreenOnVerticalDrag: true,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Divider(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              "Comments (${widget.travelCart.commnets.length})",
+                              style: TextStyle(fontSize: 20)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          for (var i in widget.travelCart.commnets)
+                            CommentSectionView(
+                              comment: i,
+                            )
+                        ],
+                      ),
+                    ),
+                    TextField(
+                      onChanged: ((e) => {
+                            setState(() {
+                              value = e;
+                            })
+                          }),
+                      controller: textCtrl,
+                      decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                            borderSide: new BorderSide(color: Colors.black),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(23.0))),
+                        hintText: 'Add your comment',
+                        suffixIcon: GestureDetector(
+                          child: Icon(
+                            Icons.send,
+                            color: Colors.black,
+                          ),
+                          onTap: (() => {addComment()}),
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.comment,
+                          color: Colors.black,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              ],
-            );
-          },
+              ),
+            ],
+          ),
         ),
       ),
     );

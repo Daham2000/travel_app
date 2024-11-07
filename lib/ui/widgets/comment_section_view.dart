@@ -6,15 +6,23 @@ class CommentSectionView extends StatelessWidget {
 
   const CommentSectionView({super.key, required this.comment});
 
-  String getTimeGap() {
+  List<String> getTimeGap() {
     final now = DateTime.now();
-    DateTime date = DateTime.parse(comment.commentTime.toDate().toString());
-    final timeDifferance = now.difference(date);
-    print("timeDifferance: " + timeDifferance.inDays.toString());
-    if (timeDifferance.inDays > 60) {
-      return (timeDifferance.inDays / 7).toString();
+    DateTime date;
+    if (comment.commentTime is DateTime) {
+      date = comment.commentTime;
     } else {
-      return timeDifferance.inDays.toString();
+      date = DateTime.parse(comment.commentTime.toDate().toString());
+    }
+    print(("date" + date.toString()));
+    final timeDifferance = now.difference(date);
+    print("timeDifferance: " + timeDifferance.inHours.toString());
+    if (timeDifferance.inHours > 24) {
+      return [(timeDifferance.inDays).toString(), "Days"];
+    } else if (timeDifferance.inDays > 60) {
+      return [(timeDifferance.inDays / 7).toString(), "Weeks"];
+    } else {
+      return [timeDifferance.inHours.toString(), "Hours"];
     }
   }
 
@@ -43,7 +51,7 @@ class CommentSectionView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Text(
-                  getTimeGap() + " minutes ago",
+                  getTimeGap()[0] + " ${getTimeGap()[1]} ago",
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w100,

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/db/model/attraction.dart';
 import 'package:travel_app/db/model/comment.dart';
+import 'package:travel_app/db/model/user.dart';
+import 'package:travel_app/db/repository/user_repo.dart';
 
 class AttractionRepo {
   static final AttractionRepo instance = AttractionRepo._internal();
@@ -66,14 +68,14 @@ class AttractionRepo {
           userName: "shajimb kime",
           userEmail: "",
           commentDescription:
-          "We r coming to sri lanka end of August 2024.. Looking for a local person for Info's... 😊.",
+              "We r coming to sri lanka end of August 2024.. Looking for a local person for Info's... 😊.",
           commentTime: DateTime.now(),
         ),
         Comment(
           userName: "Felix-o3m4o",
           userEmail: "",
           commentDescription:
-          "Oh Kandy. My beautiful hometown there are so many attractive places.",
+              "Oh Kandy. My beautiful hometown there are so many attractive places.",
           commentTime: DateTime.now(),
         )
       ],
@@ -150,5 +152,19 @@ class AttractionRepo {
       print('Error fetching users: $e');
       throw e;
     }
+  }
+
+  Future<void> addComment(
+      String? email, String value, Attraction attraction) async {
+
+
+    QuerySnapshot snapshot = await _attractionCollection.get();
+    final doc = snapshot.docs
+        .where((c) =>
+        c["Title"].toString().toLowerCase() == (attraction.title.toLowerCase())).first;
+    final id = doc.id;
+    await _attractionCollection
+        .doc(id)
+        .update(attraction.toJson());
   }
 }

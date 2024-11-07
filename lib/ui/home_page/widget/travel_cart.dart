@@ -7,6 +7,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_app/db/model/attraction.dart';
 import 'package:travel_app/db/model/comment.dart';
 import 'package:travel_app/utill/transitions.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,6 +26,7 @@ class TravelCart extends StatelessWidget {
   final List<dynamic> latLng;
   final List hotelModel;
   final List<Comment> commnets;
+  final Attraction attraction;
 
   const TravelCart(
       {required this.latLng,
@@ -37,7 +39,9 @@ class TravelCart extends StatelessWidget {
       required this.description,
       required this.youtubeID,
       required this.hotelModel,
-      required this.district, required this.commnets});
+      required this.district,
+      required this.commnets,
+      required this.attraction});
 
   void _launchURL() async {
     if (!await launchUrl(Uri(path: this.url)))
@@ -55,19 +59,23 @@ class TravelCart extends StatelessWidget {
               context,
               SlideBottomRoute(
                   page: SinglePost(
-                      travelCart: new TravelCart(
-                title: this.title,
-                description: this.description,
-                img: this.img,
-                youtubeID: this.youtubeID,
-                district: this.district,
-                latLng: this.latLng,
-                hotelModel: [],
-                isAd: false,
-                url: '',
-                rate: 0,
-                shortDetails: '', commnets: this.commnets,
-              ))));
+                travelCart: new TravelCart(
+                  title: this.title,
+                  description: this.description,
+                  img: this.img,
+                  youtubeID: this.youtubeID,
+                  district: this.district,
+                  latLng: this.latLng,
+                  hotelModel: [],
+                  isAd: false,
+                  url: '',
+                  rate: 0,
+                  shortDetails: '',
+                  commnets: this.commnets,
+                  attraction: this.attraction,
+                ),
+                attraction: this.attraction,
+              )));
         }
       },
       child: Material(

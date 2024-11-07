@@ -59,11 +59,10 @@ class UserRepository {
     }
   }
 
-  Future<List<User>> getUserByEmail(String email) async {
+  Future<User> getUserByEmail(String email) async {
     try {
       QuerySnapshot snapshot = await _userCollection.get();
-      return snapshot.docs.where((c) => c["email"].toString().toLowerCase().contains(email.toLowerCase())).map(((doc) => User.fromMap(doc.data() as Map<String, dynamic>)))
-          .toList();
+      return snapshot.docs.where((c) => c["email"].toString().toLowerCase() == (email.toLowerCase())).map((e) => User.fromMap(e.data() as Map<String, dynamic>)).toList()[0];
     } catch (e) {
       print('Error fetching user: $e');
       throw e;
