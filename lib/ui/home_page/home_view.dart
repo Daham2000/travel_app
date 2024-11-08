@@ -3,8 +3,6 @@
  * Author: Daham
  *
  */
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +23,8 @@ class _HomeViewState extends State<HomeView> {
   // ignore: close_sinks
   final searchController = TextEditingController();
   ScrollController listController = ScrollController();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -42,6 +42,8 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  List<String> items = List.generate(20, (index) => "Item ${index + 1}");
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(buildWhen: (previous, current) {
@@ -49,182 +51,198 @@ class _HomeViewState extends State<HomeView> {
           previous.attractionList?.length != current.attractionList?.length;
     }, builder: (context, state) {
       return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(150.0),
-          child: AppBar(
-            elevation: 0,
-            flexibleSpace: Image(
-              image: AssetImage(ImageAssets.appBarImage),
-              fit: BoxFit.cover,
-            ),
-            actions: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: SvgPicture.asset(
-                      ImageAssets.travelIcon,
-                      color: Colors.white,
-                      width: 24.0,
+          backgroundColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(150.0),
+            child: AppBar(
+              elevation: 0,
+              flexibleSpace: Image(
+                image: AssetImage(ImageAssets.appBarImage),
+                fit: BoxFit.cover,
+              ),
+              actions: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: SvgPicture.asset(
+                        ImageAssets.travelIcon,
+                        color: Colors.white,
+                        width: 24.0,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0, top: 0.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Text(
-                            "Discover",
-                            style: TextStyle(
-                              fontSize: 26.0,
-                              color: Colors.white,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20.0, top: 0.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Text(
+                              "Discover",
+                              style: TextStyle(
+                                fontSize: 26.0,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Container(
-                            width: 80.0,
-                            child: RichText(
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              text: TextSpan(
-                                text: "Sri Lanka's top travel places",
-                                style: TextStyle(
-                                  fontSize: 10.0,
-                                  color: Colors.white,
+                            Container(
+                              width: 80.0,
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                text: TextSpan(
+                                  text: "Sri Lanka's top travel places",
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              )
-            ],
-            backgroundColor: Colors.transparent,
-            iconTheme: IconThemeData(color: Colors.white),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(20.0),
-              // here the desired height
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
-                child: TextField(
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: "Avenir LT Std",
-                        fontWeight: FontWeight.w300,
-                        color: Colors.black),
-                    prefixIcon: state.searchList?.isNotEmpty == true
-                        ? Padding(
-                            padding: const EdgeInsets.only(
-                                right: 2.0, top: 5, bottom: 5, left: 2),
-                            child: InkWell(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                searchController.clear();
-                              },
+                    )
+                  ],
+                )
+              ],
+              backgroundColor: Colors.transparent,
+              iconTheme: IconThemeData(color: Colors.white),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(20.0),
+                // here the desired height
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: "Avenir LT Std",
+                          fontWeight: FontWeight.w300,
+                          color: Colors.black),
+                      prefixIcon: state.searchList?.isNotEmpty == true
+                          ? Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 2.0, top: 5, bottom: 5, left: 2),
+                              child: InkWell(
+                                onTap: () {
+                                  FocusScope.of(context).unfocus();
+                                  searchController.clear();
+                                },
+                                child: Icon(
+                                  Icons.close,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 2.0, top: 5, bottom: 5, left: 2),
                               child: Icon(
-                                Icons.close,
-                                color: Colors.grey,
+                                Icons.search,
+                                color: Colors.black,
                               ),
                             ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.only(
-                                right: 2.0, top: 5, bottom: 5, left: 2),
-                            child: Icon(
-                              Icons.search,
-                              color: Colors.black,
-                            ),
-                          ),
-                    hintText: "Search",
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                    border: new OutlineInputBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: new BorderSide(color: Colors.grey)),
+                      hintText: "Search",
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                      border: new OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: new BorderSide(color: Colors.grey)),
+                    ),
+                    onChanged: (query) {
+                      context.read<HomeBloc>().getAllAttractionsByName(query);
+                    },
                   ),
-                  onChanged: (query) {
-                    context.read<HomeBloc>().getAllAttractionsByName(query);
-                  },
                 ),
               ),
             ),
           ),
-        ),
-        drawer: DrawerHome(
-          version: state.version ?? "",
-        ),
-        body: Stack(
-          children: [
-            if (state.attractionList != null)
-              ListView(
-                controller: listController,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 19, vertical: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Popular places",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15.0,
-                          ),
-                        )
-                      ],
-                    ),
+          drawer: DrawerHome(
+            version: state.version ?? "",
+          ),
+          body: RefreshIndicator(
+            key: _refreshIndicatorKey,
+            color: Colors.white,
+            backgroundColor: Colors.blue,
+            strokeWidth: 4.0,
+            onRefresh: () {
+              context.read<HomeBloc>().getAllAttractions();
+              searchController.clear();
+              return Future<void>.delayed(const Duration(seconds: 2));
+            },
+            child: state.isSearching ?? false
+                ? Center(child: CupertinoActivityIndicator())
+                : ListView.builder(
+                    itemCount: state.searchList!.length > 0
+                        ? state.searchList!.length
+                        : state.attractionList!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return TravelCart(
+                        title: state.searchList!.length > 0
+                            ? state.searchList[index].title
+                            : state.attractionList?[index].title,
+                        img: state.searchList!.length > 0
+                            ? state.searchList[index].images[0]
+                            : state.attractionList?[index].images[0],
+                        isAd: false,
+                        description: state.searchList!.length > 0
+                            ? state.searchList[index].description
+                            : state.attractionList?[index].description,
+                        shortDetails: state.searchList!.length > 0
+                            ? state.searchList[index].shortDetail
+                            : state.attractionList?[index].shortDetail,
+                        youtubeID: state.searchList!.length > 0
+                            ? state.searchList[index].youtubeId
+                            : state.attractionList?[index].youtubeId,
+                        district: state.searchList!.length > 0
+                            ? state.searchList[index].district
+                            : state.attractionList?[index].district,
+                        latLng: state.searchList!.length > 0
+                            ? state.searchList[index].latLng
+                            : state.attractionList?[index].latLng,
+                        hotelModel: [],
+                        url: '',
+                        rate: 0,
+                        commnets: state.searchList!.length > 0
+                            ? state.searchList[index].comments
+                            : state.attractionList?[index].comments,
+                        attraction: state.searchList!.length > 0
+                            ? state.searchList[index]
+                            : state.attractionList?[index],
+                      );
+                    },
                   ),
-                  state.isSearching ?? false
-                      ? Center(child: CupertinoActivityIndicator())
-                      : Container(),
-                  for (final e in state.searchList!.length > 0
-                      ? state.searchList!
-                      : state.attractionList!)
-                    TravelCart(
-                      title: e.title,
-                      img: e.images[0],
-                      isAd: false,
-                      description: e.description,
-                      shortDetails: e.shortDetail,
-                      youtubeID: e.youtubeId,
-                      district: e.district,
-                      latLng: e.latLng,
-                      hotelModel: [],
-                      url: '',
-                      rate: 0,
-                      commnets: e.comments,
-                      attraction: e,
-                    ),
-                ],
-              )
-            else
-              Center(
-                child: CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              )
-          ],
-        ),
-      );
+          ));
     });
   }
 }
+
+// Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 19, vertical: 10.0),
+// child: Row(
+// mainAxisAlignment: MainAxisAlignment.start,
+// children: [
+// Text(
+// "Popular places",
+// style: TextStyle(
+// color: Colors.black,
+// fontSize: 15.0,
+// ),
+// )
+// ],
+// ),
+// ),

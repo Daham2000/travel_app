@@ -19,7 +19,7 @@ class HomeBloc extends Cubit<HomeState> {
     AttractionRepo attractionRepo = AttractionRepo();
     final list = await attractionRepo.getALl();
     // attractionRepo.addAll();
-    emit(state.copyWith(attractionList: list));
+    emit(state.copyWith(attractionList: list,searchList: []));
     emit(state.copyWith(isSearching: false));
   }
 

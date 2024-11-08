@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/db/model/attraction.dart';
 import 'package:travel_app/db/model/comment.dart';
-import 'package:travel_app/db/model/user.dart';
-import 'package:travel_app/db/repository/user_repo.dart';
 
 class AttractionRepo {
   static final AttractionRepo instance = AttractionRepo._internal();

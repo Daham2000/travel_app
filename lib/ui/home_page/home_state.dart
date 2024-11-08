@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 class HomeState {
   final String? error;
   final List? attractionList;
-  final List? searchList;
+  final List searchList;
   final List? hotelList;
   final List? attractionListTwo;
   final bool? isSearching;
