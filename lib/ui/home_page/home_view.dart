@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travel_app/db/model/user.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import 'home_bloc.dart';
@@ -30,6 +31,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     listController.addListener(_scrollListener);
+    context.read<HomeBloc>().setUserDetails();
     context.read<HomeBloc>().getAllAttractions();
     context.read<HomeBloc>().getAppVersion();
   }
@@ -172,6 +174,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           drawer: DrawerHome(
             version: state.version ?? "",
+            user: state.user ?? User(email: "", firstName: "", lastName: ""),
           ),
           body: RefreshIndicator(
             key: _refreshIndicatorKey,

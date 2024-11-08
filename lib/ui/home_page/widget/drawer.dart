@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/db/auth/authentication.dart';
+import 'package:travel_app/db/model/user.dart';
 import 'package:travel_app/ui/login_page/login_provider.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
@@ -15,9 +16,10 @@ import '../home_provider.dart';
 
 class DrawerHome extends StatelessWidget {
   final String version;
+  final User user;
   final double gap = 20;
 
-  const DrawerHome({Key? key, required this.version});
+  const DrawerHome({Key? key, required this.version, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +64,18 @@ class DrawerHome extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Text(
-                              "John Clark",
-                              style: GoogleFonts.mulish(
-                                  fontSize: 20, color: Colors.blue),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                user.firstName + " " + user.lastName,
+                                style: GoogleFonts.mulish(
+                                    fontSize: 20, color: Colors.blue),
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 9),
                               child: Text(
-                                "dahamakalanka200@gmail.com",
+                               user.email,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.mulish(
                                   fontSize: 9,

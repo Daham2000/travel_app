@@ -5,6 +5,7 @@
  */
 
 import 'package:flutter/cupertino.dart';
+import 'package:travel_app/db/model/user.dart';
 
 @immutable
 class HomeState {
@@ -19,6 +20,7 @@ class HomeState {
   final bool? moreSearching;
   final bool? isUpdated;
   final String? version;
+  final User? user;
 
   HomeState({
     required this.error,
@@ -32,6 +34,7 @@ class HomeState {
     required this.isUpdated,
     required this.hotelList,
     required this.version,
+    required this.user,
   });
 
   HomeState copyWith(
@@ -44,6 +47,7 @@ class HomeState {
       bool? moreSearching,
       bool? isUpdated,
       String? version,
+      User? user,
       int? page,
       int? limit}) {
     return HomeState(
@@ -58,6 +62,7 @@ class HomeState {
       limit: limit ?? this.limit,
       moreSearching: moreSearching ?? this.moreSearching,
       version: version ?? this.version,
+      user: user ?? this.user,
     );
   }
 
@@ -73,5 +78,6 @@ class HomeState {
         limit: 10,
         moreSearching: false,
         version: "",
+        user: null,
       );
 }
