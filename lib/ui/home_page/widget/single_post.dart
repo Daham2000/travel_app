@@ -4,6 +4,8 @@
  *
  */
 
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +16,9 @@ import 'package:travel_app/db/model/attraction.dart';
 import 'package:travel_app/db/model/comment.dart';
 import 'package:travel_app/db/repository/attraction_repo.dart';
 import 'package:travel_app/db/repository/user_repo.dart';
+import 'package:travel_app/ui/hotel_view/hotel_view.dart';
 import 'package:travel_app/ui/widgets/comment_section_view.dart';
+import 'package:travel_app/utill/hotel_service.dart';
 import 'package:travel_app/utill/manage_hotel_number.dart';
 import 'package:travel_app/utill/styled_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -50,8 +54,10 @@ class _SinglePostState extends State<SinglePost> {
     saveNumber();
     _controller = YoutubePlayerController.fromVideoId(
       videoId: widget.travelCart.youtubeID,
-      autoPlay: true,
-      params: const YoutubePlayerParams(showFullscreenButton: true),
+      autoPlay: false,
+      params: const YoutubePlayerParams(
+        showFullscreenButton: false,
+      ),
     );
   }
 
@@ -215,14 +221,46 @@ class _SinglePostState extends State<SinglePost> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0, vertical: 10.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: StyledColor.ORDER_STATE_BTN_COLOR,
+                          elevation: 1.0,
+                        ),
+                        onPressed: () async {
+                          final hotels = await fetchNearbyHotels(
+                              double.parse(widget.attraction.latLng[0]),
+                              double.parse(widget.travelCart.latLng[1]));
+
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return HotelViewList(
+                              list: hotels.results,
+                            );
+                          }));
+                        },
+                        child: Text(
+                          "Click here to find near by Hotels",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: 5,
                     ),
                     Divider(),
-                    YoutubePlayer(
-                      controller: _controller,
-                      aspectRatio: 16 / 9,
-                      enableFullScreenOnVerticalDrag: true,
+                    Container(
+                      child: YoutubePlayer(
+                        controller: _controller,
+                        aspectRatio: 16 / 9,
+                        enableFullScreenOnVerticalDrag: true,
+                      ),
                     ),
                     SizedBox(
                       height: 15,

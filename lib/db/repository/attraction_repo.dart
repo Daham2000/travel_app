@@ -154,15 +154,13 @@ class AttractionRepo {
 
   Future<void> addComment(
       String? email, String value, Attraction attraction) async {
-
-
     QuerySnapshot snapshot = await _attractionCollection.get();
     final doc = snapshot.docs
         .where((c) =>
-        c["Title"].toString().toLowerCase() == (attraction.title.toLowerCase())).first;
+            c["Title"].toString().toLowerCase() ==
+            (attraction.title.toLowerCase()))
+        .first;
     final id = doc.id;
-    await _attractionCollection
-        .doc(id)
-        .update(attraction.toJson());
+    await _attractionCollection.doc(id).update(attraction.toJson());
   }
 }
