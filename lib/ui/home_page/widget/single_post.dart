@@ -237,7 +237,7 @@ class _SinglePostState extends State<SinglePost> {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (BuildContext context) {
                             return HotelViewList(
-                              list: hotels.results,
+                              list: hotels.results, mainImg: widget.travelCart.img,
                             );
                           }));
                         },
