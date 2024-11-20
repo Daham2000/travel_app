@@ -11,6 +11,7 @@ import 'package:travel_app/db/auth/authentication.dart';
 import 'package:travel_app/db/model/user.dart';
 import 'package:travel_app/db/repository/user_repo.dart';
 import 'package:travel_app/ui/home_page/home_provider.dart';
+import 'package:travel_app/ui/intro_page/intro_view.dart';
 import 'package:travel_app/ui/login_page/login_bloc.dart';
 import 'package:travel_app/ui/login_page/login_state.dart';
 import 'package:travel_app/ui/root_page/widget/input_decoration.dart';
@@ -56,7 +57,7 @@ class _LoginViewState extends State<LoginView> {
       );
       Future.microtask(
         () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeProvider())),
+            context, MaterialPageRoute(builder: (context) => IntroView())),
       );
     } else {
       toastification.show(
@@ -86,7 +87,7 @@ class _LoginViewState extends State<LoginView> {
           lastName: lastNameCtrl.text));
       Future.microtask(
         () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeProvider())),
+            context, MaterialPageRoute(builder: (context) => IntroView())),
       );
     } else {
       toastification.show(

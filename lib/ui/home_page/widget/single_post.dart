@@ -74,6 +74,7 @@ class _SinglePostState extends State<SinglePost> {
 
   @override
   void dispose() {
+    _controller.close();
     super.dispose();
   }
 

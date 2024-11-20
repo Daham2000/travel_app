@@ -18,6 +18,6 @@ class ImageAssets{
 
   //Demo images
   static final String demoProPic = "assets/img/demoProPic.png";
-  static final String french = "assets/img/franch.jpg";
+  static final String french = "assets/img/1.jpg";
   static final String appBarImage = "assets/img/appbar.png";
 }

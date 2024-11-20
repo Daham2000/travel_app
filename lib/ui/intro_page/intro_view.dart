@@ -33,7 +33,7 @@ class IntroView extends StatelessWidget {
               Container(
                 width: 220.0,
                 child: Text(
-                  "Create your perfect trip here!",
+                  "Find popular attractions in Sri Lanka!",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.mulish(
                     fontSize: 40.0,
@@ -47,9 +47,9 @@ class IntroView extends StatelessWidget {
               Container(
                 width: 250.0,
                 child: Text(
-                  " Add your favourite places to your trip plan and set duration "
-                  "then invite to your friend with this app. Let us create a "
-                  "perfect trip for you.",
+                  "Embark on your journey to discover the breathtaking beauty of Sri Lanka. "
+                      "From serene beaches to lush tea plantations, ancient ruins to vibrant cityscapes, "
+                      "MAYTH is your ultimate travel companion.",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.mulish(
                     fontSize: 16.0,
