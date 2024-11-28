@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/db/auth/authentication.dart';
 import 'package:travel_app/db/model/user.dart';
 import 'package:travel_app/ui/login_page/login_provider.dart';
+import 'package:travel_app/ui/trip_view/trip_provider.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import '../home_provider.dart';
@@ -118,6 +119,37 @@ class DrawerHome extends StatelessWidget {
                         ],
                       ),
                     ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Future.microtask(
+                            () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TripProvider())),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15, bottom: 16),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today_sharp,
+                            color: Colors.blue,
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            "Trip Plan",
+                            style: TextStyle(color: Colors.blueAccent),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
                   ),
                   InkWell(
                     onTap: () async {

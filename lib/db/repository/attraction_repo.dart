@@ -9,6 +9,14 @@ class AttractionRepo {
     return instance;
   }
 
+  AttractionRepo._internal();
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // Collection reference
+  CollectionReference get _attractionCollection =>
+      _firestore.collection('attractions');
+
   List<Attraction> sampleAttractions = [
     Attraction(
       description:
@@ -79,20 +87,49 @@ class AttractionRepo {
       ],
     ),
   ];
+  //
+  // Future<void> addNewFieldToAllDocuments() async {
+  //   final firestore = FirebaseFirestore.instance;
+  //
+  //   try {
+  //     // Fetch all documents from the collection
+  //     final querySnapshot = await _attractionCollection.get();
+  //
+  //     // Batch write handler
+  //     WriteBatch batch = firestore.batch();
+  //     int counter = 0;
+  //     const batchSize = 500;
+  //
+  //     for (final doc in querySnapshot.docs) {
+  //       // Update each document with a new field
+  //       batch.update(doc.reference, {
+  //         'id': doc.id
+  //       }); // Replace `newField` and `defaultValue` as needed
+  //       counter++;
+  //
+  //       // Commit batch every 500 writes
+  //       if (counter % batchSize == 0) {
+  //         await batch.commit();
+  //         batch = firestore.batch(); // Start a new batch
+  //       }
+  //     }
+  //
+  //     // Commit the remaining batch
+  //     if (counter % batchSize != 0) {
+  //       await batch.commit();
+  //     }
+  //
+  //     print('$counter documents updated successfully.');
+  //   } catch (e) {
+  //     print('Error updating documents: $e');
+  //   }
+  // }
 
   void addAll() {
     for (int i = 0; i < sampleAttractions.length; i++) {
       addAttraction(sampleAttractions[i]);
     }
   }
-
-  AttractionRepo._internal();
-
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  // Collection reference
-  CollectionReference get _attractionCollection =>
-      _firestore.collection('attractions');
 
   Future<void> addAttraction(Attraction model) async {
     try {
@@ -107,6 +144,19 @@ class AttractionRepo {
     try {
       QuerySnapshot snapshot =
           await _attractionCollection.orderBy("Title").limit(5).get();
+      return snapshot.docs
+          .map((doc) => Attraction.fromJson(doc.data()))
+          .toList();
+    } catch (e) {
+      print('Error fetching users: $e');
+      throw e;
+    }
+  }
+
+  Future<List<Attraction>> getALlWithoutPagination() async {
+    try {
+      QuerySnapshot snapshot =
+      await _attractionCollection.orderBy("Title").get();
       return snapshot.docs
           .map((doc) => Attraction.fromJson(doc.data()))
           .toList();

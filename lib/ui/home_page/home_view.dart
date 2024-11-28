@@ -232,20 +232,3 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 }
-
-// Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 19, vertical: 10.0),
-// child: Row(
-// mainAxisAlignment: MainAxisAlignment.start,
-// children: [
-// Text(
-// "Popular places",
-// style: TextStyle(
-// color: Colors.black,
-// fontSize: 15.0,
-// ),
-// )
-// ],
-// ),
-// ),
