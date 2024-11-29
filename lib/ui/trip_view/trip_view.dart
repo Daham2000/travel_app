@@ -7,6 +7,7 @@ import 'package:travel_app/db/model/trip.dart';
 import 'package:travel_app/db/model/user.dart';
 import 'package:travel_app/db/repository/trip_repo.dart';
 import 'package:travel_app/ui/home_page/widget/drawer.dart';
+import 'package:travel_app/ui/trip_view/all_trips_view/all_trip_provider.dart';
 import 'package:travel_app/ui/trip_view/trip_bloc.dart';
 import 'package:travel_app/ui/trip_view/trip_state.dart';
 import 'package:travel_app/ui/trip_view/widgets/destination_view.dart';
@@ -258,6 +259,9 @@ class _TripViewState extends State<TripView> with RestorationMixin {
           title: Text('Trip Plan added successful.'),
           autoCloseDuration: const Duration(seconds: 5),
         );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) {
+          return AllTripProvider();
+        }));
       } else {
         toastification.show(
           context: context,

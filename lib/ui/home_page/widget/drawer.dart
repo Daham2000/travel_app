@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/db/auth/authentication.dart';
 import 'package:travel_app/db/model/user.dart';
 import 'package:travel_app/ui/login_page/login_provider.dart';
+import 'package:travel_app/ui/trip_view/all_trips_view/all_trip_provider.dart';
 import 'package:travel_app/ui/trip_view/trip_provider.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
@@ -123,10 +124,10 @@ class DrawerHome extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       Future.microtask(
-                            () => Navigator.pushReplacement(
+                            () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => TripProvider())),
+                                builder: (context) => AllTripProvider())),
                       );
                     },
                     child: Padding(

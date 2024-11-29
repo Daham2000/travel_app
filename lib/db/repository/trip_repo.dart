@@ -32,9 +32,10 @@ class TripRepository {
 
   Future<List<Trip>> getAllTripPlans() async {
     try {
+      final String email = FirebaseAuth.instance.currentUser?.email ?? "";
       QuerySnapshot snapshot = await _tripCollection.get();
       return snapshot.docs
-          .map((doc) => Trip.fromMap(doc.data() as Map<String, dynamic>))
+          .map((doc) => Trip.fromMap(doc.data() as Map<String, dynamic>)).where((c) => c.users.contains(email) && c.endDate.isAfter(DateTime.now()))
           .toList();
     } catch (e) {
       print('Error fetching Trips: $e');

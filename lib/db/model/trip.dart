@@ -16,7 +16,7 @@ class AttractionTripModel {
 
   factory AttractionTripModel.fromMap(Map<String, dynamic> json) =>
       AttractionTripModel(
-        id: json["id"],
+        id: json["id"].toString(),
         isRoomBooked: json["isRoomBooked"],
       );
 
@@ -29,7 +29,7 @@ class AttractionTripModel {
 class Trip {
   String name;
   String id;
-  List<String> users;
+  List<dynamic> users;
   DateTime startDate;
   DateTime endDate;
   List<AttractionTripModel> attractionList;
@@ -50,10 +50,11 @@ class Trip {
   factory Trip.fromMap(Map<String, dynamic> json) => Trip(
         name: json["name"],
         id: json["id"],
-        startDate: json["startDate"],
-        endDate: json["endDate"],
-        attractionList: json["attractionList"],
-    users: json["users"],
+        startDate: json["startDate"].toDate(),
+        endDate: json["endDate"].toDate(),
+        attractionList: List<AttractionTripModel>.from(
+            json["attractionList"].map((x) => AttractionTripModel.fromJson(x))),
+        users: json["users"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -62,7 +63,7 @@ class Trip {
         "startDate": startDate,
         "endDate": endDate,
         "users": users,
-        "attractionList": List<dynamic>.from(
-            attractionList.map((x) => x.toJson())),
+        "attractionList":
+            List<dynamic>.from(attractionList.map((x) => x.toJson())),
       };
 }
