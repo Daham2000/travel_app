@@ -30,6 +30,16 @@ class TripRepository {
     }
   }
 
+  Future<bool> updateTripPlan(Trip trip) async {
+    try{
+      final doc = await _tripCollection.doc(trip.id ?? "").update(trip.toMap());
+      return true;
+    }catch(e) {
+      print('Error adding user: $e');
+      return false;
+    }
+  }
+
   Future<List<Trip>> getAllTripPlans() async {
     try {
       final String email = FirebaseAuth.instance.currentUser?.email ?? "";

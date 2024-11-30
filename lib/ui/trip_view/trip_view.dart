@@ -15,7 +15,13 @@ import 'package:travel_app/utill/image_assets.dart';
 import 'package:travel_app/utill/styled_colors.dart';
 
 class TripView extends StatefulWidget {
-  const TripView({super.key});
+  final bool isEdit;
+  final Trip? trip;
+
+  TripView({
+    required this.isEdit,
+    this.trip,
+  });
 
   @override
   State<TripView> createState() => _TripViewState();
@@ -28,6 +34,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
     context.read<TripBloc>().setUserDetails();
     context.read<TripBloc>().getAppVersion();
     context.read<TripBloc>().loadAll();
+    context.read<TripBloc>().setCurrentTrip(widget.trip);
   }
 
   String? get restorationId => "Main";
@@ -104,6 +111,8 @@ class _TripViewState extends State<TripView> with RestorationMixin {
   }
 
   Future<void> _showMyDialog(Trip tripData) async {
+    final txt = TextEditingController();
+    txt.text = tripData.name;
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -114,6 +123,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
             child: ListBody(
               children: <Widget>[
                 TextField(
+                  controller: txt,
                   onChanged: (e) {
                     tripData.name = e;
                     context.read<TripBloc>().updateTripDateName(tripData);
@@ -245,28 +255,36 @@ class _TripViewState extends State<TripView> with RestorationMixin {
       toastification.show(
         context: context,
         type: ToastificationType.error,
-        title: Text('Please enter trip name.'),
+        title: const Text('Please enter trip name.'),
         autoCloseDuration: const Duration(seconds: 5),
       );
     } else {
       context.read<TripBloc>().updateLoadingState(true);
       TripRepository repository = TripRepository();
-      final bool result = await repository.addTripPlan(currentTrip);
+      bool result;
+      if (!widget.isEdit) {
+        result = await repository.addTripPlan(currentTrip);
+      } else {
+        result = await repository.updateTripPlan(currentTrip);
+      }
       if (result) {
         toastification.show(
           context: context,
           type: ToastificationType.success,
-          title: Text('Trip Plan added successful.'),
+          title: widget.isEdit
+              ? const Text('Trip Plan updated successful.')
+              : const Text('Trip Plan added successful.'),
           autoCloseDuration: const Duration(seconds: 5),
         );
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) {
           return AllTripProvider();
         }));
       } else {
         toastification.show(
           context: context,
           type: ToastificationType.error,
-          title: Text('Error adding Trip Plan.'),
+          title: const Text('Error adding Trip Plan.'),
           autoCloseDuration: const Duration(seconds: 5),
         );
       }
@@ -284,7 +302,6 @@ class _TripViewState extends State<TripView> with RestorationMixin {
               current.currentTrip.attractionList.length ||
           previous.currentTrip != current.currentTrip;
     }, builder: (context, state) {
-      print("previous.currentTrip: " + state.currentTrip.startDate.toString());
       return Scaffold(
         appBar: AppBar(
           toolbarHeight: 100.0,
@@ -293,8 +310,8 @@ class _TripViewState extends State<TripView> with RestorationMixin {
             fit: BoxFit.cover,
           ),
           title: Text(
-            "Create A Trip Plan",
-            style: TextStyle(color: Colors.white),
+            widget.isEdit ? "Edit the Trip Plan" : "Create A Trip Plan",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
           ),
           centerTitle: true,
           leading: Column(
@@ -318,7 +335,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: ListView(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
@@ -335,15 +352,15 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                   ),
                 ],
               ),
-              Divider(),
-              SizedBox(
+              const Divider(),
+              const SizedBox(
                 height: 15,
               ),
               Row(
                 children: [
                   Text("Start Date: " +
                       getDateString(state.currentTrip.startDate)),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   InkWell(
@@ -354,14 +371,14 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                   )
                 ],
               ),
-              Divider(),
-              SizedBox(
+              const Divider(),
+              const SizedBox(
                 height: 15,
               ),
               Row(
                 children: [
                   Text("End Date: " + getDateString(state.currentTrip.endDate)),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   InkWell(
@@ -372,21 +389,21 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                   )
                 ],
               ),
-              Divider(),
-              SizedBox(
+              const Divider(),
+              const SizedBox(
                 height: 15,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Selected Destinations",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 15.0,
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
                   for (final (index, item)
                       in state.currentTrip.attractionList.indexed)
                     Padding(
@@ -400,8 +417,8 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                     )
                 ],
               ),
-              Divider(),
-              SizedBox(
+              const Divider(),
+              const SizedBox(
                 height: 15,
               ),
               Column(
@@ -417,9 +434,9 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                             if (state.list.length > 0)
                               {_showDialogSelectDestinations(state.list)}
                           },
-                      child: SizedBox(
-                        width: 150,
-                        child: Text(
+                      child: const SizedBox(
+                        width: 200,
+                        child: const Text(
                           "Add More Destination",
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -427,7 +444,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                           ),
                         ),
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Text(
@@ -442,7 +459,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                         fontSize: 18,
                         fontWeight: FontWeight.w500),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   ElevatedButton(
@@ -452,18 +469,18 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                       ),
                       onPressed: () => {addTrip(state.currentTrip)},
                       child: SizedBox(
-                        width: 150,
+                        width: 200,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: (state.isSearching!)
                               ? Center(
-                                  child: SizedBox(
+                                  child: const SizedBox(
                                       width: 9,
                                       height: 9,
                                       child: CircularProgressIndicator(
                                         color: Colors.white,
                                       )))
-                              : Text(
+                              : const Text(
                                   "Save",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -478,8 +495,8 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                         elevation: 1.0,
                       ),
                       onPressed: () => {},
-                      child: SizedBox(
-                        width: 150,
+                      child: const SizedBox(
+                        width: 200,
                         child: Text(
                           "Share with Friends",
                           textAlign: TextAlign.center,
@@ -490,7 +507,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                       )),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
             ],

@@ -30,6 +30,19 @@ class TripBloc extends Cubit<TripState> {
     emit(state.clone(isSearching: isLoading));
   }
 
+  void setCurrentTrip(Trip? trip) {
+    emit(state.clone(currentTrip: trip ?? state.currentTrip));
+  }
+
+  Future<void> updateTripPlan(Trip trip) async {
+    emit(state.clone(isSearching: true));
+    TripRepository repository = TripRepository();
+    final bool result = await repository.addTripPlan(state.currentTrip);
+    emit(state.clone(
+        isSearching: false,
+        error: !result ? "Trip plan added unsuccessful." : ""));
+  }
+
   void setUserDetails() async {
     final email = FirebaseAuth.instance.currentUser?.email;
     final UserRepository userRepository = UserRepository();

@@ -67,8 +67,19 @@ class _ViewAllTripPlanState extends State<ViewAllTripPlan> {
                 height: 15,
               ),
               for (final t in state.tripList ?? [])
-                TripCardView(
-                  trip: t,
+                InkWell(
+                  onTap: () => {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return TripProvider(
+                        isEdit: true,
+                        trip: t,
+                      );
+                    }))
+                  },
+                  child: TripCardView(
+                    trip: t,
+                  ),
                 ),
               const SizedBox(
                 height: 15,
@@ -81,7 +92,9 @@ class _ViewAllTripPlanState extends State<ViewAllTripPlan> {
                   onPressed: () => {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                          return TripProvider();
+                          return TripProvider(
+                            isEdit: false,
+                          );
                         }))
                       },
                   child: const SizedBox(
