@@ -10,13 +10,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:themed/themed.dart';
+import 'package:toastification/toastification.dart';
 import 'package:travel_app/db/model/attraction.dart';
 import 'package:travel_app/db/model/comment.dart';
+import 'package:travel_app/db/model/trip.dart';
 import 'package:travel_app/db/repository/attraction_repo.dart';
+import 'package:travel_app/db/repository/trip_repo.dart';
 import 'package:travel_app/db/repository/user_repo.dart';
 import 'package:travel_app/ui/hotel_view/hotel_view.dart';
+import 'package:travel_app/ui/root_page/root_bloc.dart';
+import 'package:travel_app/ui/root_page/root_state.dart';
+import 'package:travel_app/ui/trip_view/trip_bloc.dart';
 import 'package:travel_app/ui/widgets/comment_section_view.dart';
 import 'package:travel_app/utill/hotel_service.dart';
 import 'package:travel_app/utill/manage_hotel_number.dart';
@@ -106,6 +113,79 @@ class _SinglePostState extends State<SinglePost> {
     textCtrl.clear();
   }
 
+  TripRepository repository = TripRepository();
+
+  void updateTripDestinations(Trip trip) async {
+    try {
+      var contain = trip.attractionList
+          .where((tt) => tt.id == widget.attraction.title)
+          .toList();
+      if (contain.length == 0) {
+        trip.attractionList.add(AttractionTripModel(
+            id: widget.attraction.title ?? "", isRoomBooked: false));
+      }
+      await repository.updateTripPlan(trip);
+      toastification.show(
+        context: context,
+        type: ToastificationType.success,
+        title: const Text('Attraction Added Trip Plan Successful.'),
+        autoCloseDuration: const Duration(seconds: 5),
+      );
+      Navigator.of(context).pop();
+    } catch (e) {
+      toastification.show(
+        context: context,
+        type: ToastificationType.success,
+        title: const Text('Trip Plan Update Failed.'),
+        autoCloseDuration: const Duration(seconds: 5),
+      );
+    }
+  }
+
+  Future<void> showTripPlanList(List<Trip> trips) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext contextNew) {
+        return AlertDialog(
+          title: const Text(
+            'Select a Up Coming Trip Plan to Add This Destination',
+            style: TextStyle(fontSize: 18.0),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                for (final i in trips)
+                  InkWell(
+                    onTap: () => {updateTripDestinations(i)},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            i.name,
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(contextNew).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -128,20 +208,20 @@ class _SinglePostState extends State<SinglePost> {
             centerTitle: true,
             title: Text(
               "Trip information",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.w500),
             ),
             leading: InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
               ),
             ),
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(25.0),
+              preferredSize: const Size.fromHeight(25.0),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -168,7 +248,7 @@ class _SinglePostState extends State<SinglePost> {
               Expanded(
                 child: ListView(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 4.0,
                     ),
                     Container(
@@ -183,7 +263,7 @@ class _SinglePostState extends State<SinglePost> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
                     Container(
@@ -199,8 +279,35 @@ class _SinglePostState extends State<SinglePost> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
+                    ),
+                    BlocBuilder<RootBloc, RootState>(buildWhen: (pre, current) {
+                      return pre.tripList != current.tripList;
+                    }, builder: (context, state) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: StyledColor.GREEN_BTN,
+                            elevation: 1.0,
+                          ),
+                          onPressed: () {
+                            showTripPlanList(state.tripList ?? []);
+                          },
+                          child: const Text(
+                            "Add to trip plans",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                    const SizedBox(
+                      height: 10,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -212,7 +319,7 @@ class _SinglePostState extends State<SinglePost> {
                         onPressed: () {
                           openMap(widget.travelCart.title);
                         },
-                        child: Text(
+                        child: const Text(
                           "Click to view location on Google Map",
                           style: TextStyle(
                             color: Colors.white,
@@ -238,11 +345,12 @@ class _SinglePostState extends State<SinglePost> {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (BuildContext context) {
                             return HotelViewList(
-                              list: hotels.results, mainImg: widget.travelCart.img,
+                              list: hotels.results,
+                              mainImg: widget.travelCart.img,
                             );
                           }));
                         },
-                        child: Text(
+                        child: const Text(
                           "Click here to find near by Hotels",
                           style: TextStyle(
                             color: Colors.white,
@@ -252,10 +360,10 @@ class _SinglePostState extends State<SinglePost> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
-                    Divider(),
+                    const Divider(),
                     Container(
                       child: YoutubePlayer(
                         controller: _controller,
@@ -263,10 +371,10 @@ class _SinglePostState extends State<SinglePost> {
                         enableFullScreenOnVerticalDrag: true,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    Divider(),
+                    const Divider(),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Column(
@@ -276,7 +384,7 @@ class _SinglePostState extends State<SinglePost> {
                           Text(
                               "Comments (${widget.travelCart.commnets.length})",
                               style: TextStyle(fontSize: 20)),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           for (var i in widget.travelCart.commnets)
@@ -300,7 +408,7 @@ class _SinglePostState extends State<SinglePost> {
                                 BorderRadius.all(Radius.circular(23.0))),
                         hintText: 'Add your comment',
                         suffixIcon: GestureDetector(
-                          child: Icon(
+                          child: const Icon(
                             Icons.send,
                             color: Colors.black,
                           ),

@@ -385,7 +385,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                     onTap: () {
                       _restorableEndDatePickerRouteFuture.present();
                     },
-                    child: Icon(Icons.date_range),
+                    child: const Icon(Icons.date_range),
                   )
                 ],
               ),

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/db/model/user.dart';
+import 'package:travel_app/ui/root_page/root_bloc.dart';
 import 'package:travel_app/utill/image_assets.dart';
 
 import 'home_bloc.dart';
@@ -34,12 +35,13 @@ class _HomeViewState extends State<HomeView> {
     context.read<HomeBloc>().setUserDetails();
     context.read<HomeBloc>().getAllAttractions();
     context.read<HomeBloc>().getAppVersion();
+    context.read<RootBloc>().loadAllTripPlans();
+    context.read<RootBloc>().setUserDetails();
   }
 
   void _scrollListener() {
     if (listController.offset >= listController.position.maxScrollExtent &&
         (!listController.position.outOfRange)) {
-      print("load documents with pagination flutter...");
       context.read<HomeBloc>().getAttractionsWithPagination();
     }
   }

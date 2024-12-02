@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_app/db/model/user.dart';
+import 'package:travel_app/ui/home_page/widget/drawer.dart';
 import 'package:travel_app/ui/root_page/root_bloc.dart';
 import 'package:travel_app/ui/root_page/root_state.dart';
 import 'package:travel_app/ui/trip_view/trip_provider.dart';
@@ -52,6 +54,10 @@ class _ViewAllTripPlanState extends State<ViewAllTripPlan> {
             ],
           ),
         ),
+        drawer: DrawerHome(
+          version: state.version ?? "",
+          user: state.user ?? User(email: "", firstName: "", lastName: ""),
+        ),
         body: Container(
           margin: const EdgeInsets.symmetric(horizontal: 15.0),
           child: ListView(
@@ -99,7 +105,7 @@ class _ViewAllTripPlanState extends State<ViewAllTripPlan> {
                       },
                   child: const SizedBox(
                     width: 150,
-                    child: Text(
+                    child: const Text(
                       "Create a New Trip Plan",
                       textAlign: TextAlign.center,
                       style: TextStyle(
