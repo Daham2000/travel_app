@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:travel_app/db/model/user.dart';
 
 class UserRepository {
@@ -88,10 +89,27 @@ class UserRepository {
   // Fetch all users from Firestore
   Future<List<User>> getAllUsers() async {
     try {
+      final email = FirebaseAuth.instance.currentUser?.email;
       QuerySnapshot snapshot = await _userCollection.get();
       return snapshot.docs
           .map((doc) => User.fromMap(doc.data() as Map<String, dynamic>))
+          .toList()
+          .where((ele) => ele.email != email)
           .toList();
+    } catch (e) {
+      print('Error fetching users: $e');
+      throw e;
+    }
+  }
+
+  Future<void> inviteUserToTrip(List<User> users, String tripId) async {
+    try {
+      users.forEach((ele) async {
+        if (ele.invitations.where((t) => t.email == tripId).isEmpty) {
+          ele.invitations.add(Invitation(email: tripId, accepted: false));
+        }
+        await _userCollection.doc(ele.id).update(ele.toMap());
+      });
     } catch (e) {
       print('Error fetching users: $e');
       throw e;

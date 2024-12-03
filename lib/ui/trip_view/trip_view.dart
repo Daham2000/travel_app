@@ -6,12 +6,14 @@ import 'package:travel_app/db/model/attraction.dart';
 import 'package:travel_app/db/model/trip.dart';
 import 'package:travel_app/db/model/user.dart';
 import 'package:travel_app/db/repository/trip_repo.dart';
+import 'package:travel_app/db/repository/user_repo.dart';
 import 'package:travel_app/ui/home_page/widget/drawer.dart';
 import 'package:travel_app/ui/trip_view/all_trips_view/all_trip_provider.dart';
 import 'package:travel_app/ui/trip_view/trip_bloc.dart';
 import 'package:travel_app/ui/trip_view/trip_state.dart';
 import 'package:travel_app/ui/trip_view/widgets/destination_view.dart';
 import 'package:travel_app/utill/image_assets.dart';
+import 'package:travel_app/utill/route_strings.dart';
 import 'package:travel_app/utill/styled_colors.dart';
 
 class TripView extends StatefulWidget {
@@ -239,17 +241,30 @@ class _TripViewState extends State<TripView> with RestorationMixin {
     );
   }
 
-  Future<void> showDialogBoxShareWithFriends(List<User> users) async {
+  UserRepository userRepository = UserRepository();
+
+  Future<void> showDialogBoxShareWithFriends(
+      List<User> users, String tripId) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext contextNew) {
         List<String> selectedUsers = [];
+        List<User> selectedUserObjects = [];
+        if (selectedUserObjects.isEmpty) {
+          users.forEach((e) {
+            if (e.invitations.where((inv) => inv.email == tripId).isNotEmpty) {
+              selectedUserObjects.add(e);
+              selectedUsers.add(e.email);
+            }
+          });
+        }
+
         return StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+            builder: (BuildContext contextN, StateSetter setState) {
           return AlertDialog(
-            title:
-                Text('Select User Name of Your Friends to Invite to Your Trip'),
+            title: const Text(
+                'Select User Name of Your Friends to Invite to Your Trip'),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
@@ -257,7 +272,10 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(f.firstName[0].toUpperCase() + f.firstName.substring(1).trim() + " " + f.lastName),
+                        Text(f.firstName[0].toUpperCase() +
+                            f.firstName.substring(1).trim() +
+                            " " +
+                            f.lastName),
                         Checkbox(
                           checkColor: Colors.white,
                           value: selectedUsers.contains(f.email),
@@ -265,8 +283,10 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                             setState(() {
                               if (!selectedUsers.contains(f.email)) {
                                 selectedUsers.add(f.email);
+                                selectedUserObjects.add(f);
                               } else {
                                 selectedUsers.remove(f.email);
+                                selectedUserObjects.remove(f);
                               }
                             });
                           },
@@ -279,7 +299,13 @@ class _TripViewState extends State<TripView> with RestorationMixin {
             actions: <Widget>[
               TextButton(
                 child: const Text('Save'),
-                onPressed: () {
+                onPressed: () async {
+                  print("selectedUserObjects: " +
+                      selectedUserObjects.length.toString());
+                  print("selectedUsers: " + selectedUsers.length.toString());
+                  await userRepository.inviteUserToTrip(
+                      selectedUserObjects, tripId);
+                  context.read<TripBloc>().loadAllUsers();
                   Navigator.of(contextNew).pop();
                 },
               ),
@@ -382,7 +408,14 @@ class _TripViewState extends State<TripView> with RestorationMixin {
         ),
         drawer: DrawerHome(
           version: state.version ?? "",
-          user: state.user ?? User(email: "", firstName: "", lastName: "", id: '', invitations: []),
+          currentPage: RouteStrings.trip,
+          user: state.user ??
+              User(
+                  email: "",
+                  firstName: "",
+                  lastName: "",
+                  id: '',
+                  invitations: []),
         ),
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -547,8 +580,10 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                         backgroundColor: StyledColor.ORDER_STATE_BTN_COLOR,
                         elevation: 1.0,
                       ),
-                      onPressed: () =>
-                          {showDialogBoxShareWithFriends(state.users)},
+                      onPressed: () => {
+                            showDialogBoxShareWithFriends(
+                                state.users, widget.trip?.id ?? "")
+                          },
                       child: const SizedBox(
                         width: 250,
                         child: Text(

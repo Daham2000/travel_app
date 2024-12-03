@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/db/model/user.dart';
 import 'package:travel_app/ui/root_page/root_bloc.dart';
 import 'package:travel_app/utill/image_assets.dart';
+import 'package:travel_app/utill/route_strings.dart';
 
 import 'home_bloc.dart';
 import 'home_state.dart';
@@ -176,6 +177,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           drawer: DrawerHome(
             version: state.version ?? "",
+            currentPage: RouteStrings.home,
             user: state.user ?? User(email: "", firstName: "", lastName: "", id: '', invitations: []),
           ),
           body: RefreshIndicator(

@@ -16,9 +16,10 @@ class TripBloc extends Cubit<TripState> {
   }
 
   void loadAllUsers() async {
+    updateLoadingState(true);
     UserRepository userRepository = UserRepository();
     final users = await userRepository.getAllUsers();
-    emit(state.clone(users: users));
+    emit(state.clone(users: users, isSearching: false));
   }
 
   void setCurrentTrip(Trip? trip) {

@@ -13,15 +13,21 @@ import 'package:travel_app/ui/login_page/login_provider.dart';
 import 'package:travel_app/ui/trip_view/all_trips_view/all_trip_provider.dart';
 import 'package:travel_app/ui/trip_view/trip_provider.dart';
 import 'package:travel_app/utill/image_assets.dart';
+import 'package:travel_app/utill/route_strings.dart';
 
 import '../home_provider.dart';
 
 class DrawerHome extends StatelessWidget {
   final String version;
+  final String currentPage;
   final User user;
   final double gap = 20;
 
-  const DrawerHome({Key? key, required this.version, required this.user});
+  const DrawerHome(
+      {Key? key,
+      required this.version,
+      required this.user,
+      required this.currentPage});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +83,7 @@ class DrawerHome extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 9),
                               child: Text(
-                               user.email,
+                                user.email,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.mulish(
                                   fontSize: 9,
@@ -95,12 +101,14 @@ class DrawerHome extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      Future.microtask(
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeProvider())),
-                      );
+                      if (currentPage != RouteStrings.home) {
+                        Future.microtask(
+                          () => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeProvider())),
+                        );
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15, bottom: 16),
@@ -123,12 +131,14 @@ class DrawerHome extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      Future.microtask(
-                            () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AllTripProvider())),
-                      );
+                      if (currentPage != RouteStrings.allTrip) {
+                        Future.microtask(
+                          () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllTripProvider())),
+                        );
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15, bottom: 16),

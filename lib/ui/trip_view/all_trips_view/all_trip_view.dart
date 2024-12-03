@@ -7,6 +7,7 @@ import 'package:travel_app/ui/root_page/root_state.dart';
 import 'package:travel_app/ui/trip_view/trip_provider.dart';
 import 'package:travel_app/ui/trip_view/widgets/trip_card_view.dart';
 import 'package:travel_app/utill/image_assets.dart';
+import 'package:travel_app/utill/route_strings.dart';
 import 'package:travel_app/utill/styled_colors.dart';
 
 class ViewAllTripPlan extends StatefulWidget {
@@ -56,6 +57,7 @@ class _ViewAllTripPlanState extends State<ViewAllTripPlan> {
         ),
         drawer: DrawerHome(
           version: state.version ?? "",
+          currentPage: RouteStrings.allTrip,
           user: state.user ?? User(email: "", firstName: "", lastName: "", id: '', invitations: []),
         ),
         body: Container(

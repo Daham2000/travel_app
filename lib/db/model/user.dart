@@ -5,7 +5,7 @@ class User {
   String id;
   final String firstName;
   final String lastName;
-  final List<Invitation> invitations;
+  List<Invitation> invitations;
 
   User({
     required this.email,
@@ -20,20 +20,23 @@ class User {
   String toJson() => json.encode(toMap());
 
   factory User.fromMap(Map<String, dynamic> json) => User(
-    email: json["email"],
-    id: json["id"] ?? "",
-    firstName: json["firstName"],
-    lastName: json["lastName"],
-    invitations: json["invitations"] != null ? List<Invitation>.from(json["invitations"].map((x) => Invitation.fromMap(x))) : [],
-  );
+        email: json["email"],
+        id: json["id"] ?? "",
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        invitations: json["invitations"] != null
+            ? List<Invitation>.from(
+                json["invitations"].map((x) => Invitation.fromMap(x)))
+            : [],
+      );
 
   Map<String, dynamic> toMap() => {
-    "email": email,
-    "id": id,
-    "firstName": firstName,
-    "lastName": lastName,
-    "invitations": List<dynamic>.from(invitations.map((x) => x.toMap())),
-  };
+        "email": email,
+        "id": id,
+        "firstName": firstName,
+        "lastName": lastName,
+        "invitations": List<dynamic>.from(invitations.map((x) => x.toMap())),
+      };
 }
 
 class Invitation {
@@ -45,17 +48,18 @@ class Invitation {
     required this.accepted,
   });
 
-  factory Invitation.fromJson(String str) => Invitation.fromMap(json.decode(str));
+  factory Invitation.fromJson(String str) =>
+      Invitation.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
   factory Invitation.fromMap(Map<String, dynamic> json) => Invitation(
-    email: json["email"],
-    accepted: json["accepted"],
-  );
+        email: json["email"] ?? "",
+        accepted: json["accepted"] ?? false,
+      );
 
   Map<String, dynamic> toMap() => {
-    "email": email,
-    "accepted": accepted,
-  };
+        "email": email,
+        "accepted": accepted,
+      };
 }
