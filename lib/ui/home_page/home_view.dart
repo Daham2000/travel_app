@@ -176,7 +176,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           drawer: DrawerHome(
             version: state.version ?? "",
-            user: state.user ?? User(email: "", firstName: "", lastName: ""),
+            user: state.user ?? User(email: "", firstName: "", lastName: "", id: '', invitations: []),
           ),
           body: RefreshIndicator(
             key: _refreshIndicatorKey,

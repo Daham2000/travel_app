@@ -17,6 +17,7 @@ class TripState {
   final Trip currentTrip;
   final String error;
   final List<Attraction> list;
+  final List<User> users;
 
   TripState({
     required this.isSearching,
@@ -25,6 +26,7 @@ class TripState {
     required this.currentTrip,
     required this.list,
     required this.error,
+    required this.users,
   });
 
   TripState.init()
@@ -34,6 +36,7 @@ class TripState {
           version: null,
           error: "",
           list: [],
+          users: [],
           currentTrip: Trip(
               name: "",
               id: "",
@@ -50,6 +53,7 @@ class TripState {
     String? error,
     Trip? currentTrip,
     List<Attraction>? list,
+    List<User>? users,
   }) {
     return TripState(
       isSearching: isSearching ?? this.isSearching,
@@ -58,6 +62,7 @@ class TripState {
       version: version ?? this.version,
       currentTrip: currentTrip ?? this.currentTrip,
       list: list ?? this.list,
+      users: users ?? this.users,
     );
   }
 
@@ -67,6 +72,7 @@ class TripState {
         version: "",
         error: "",
         list: [],
+        users: [],
         currentTrip: Trip(
             name: "",
             id: "",

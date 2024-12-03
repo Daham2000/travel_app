@@ -9,25 +9,16 @@ import 'package:travel_app/db/repository/user_repo.dart';
 import 'package:travel_app/ui/trip_view/trip_state.dart';
 
 class TripBloc extends Cubit<TripState> {
-  TripBloc() : super(TripBloc.initialState);
-
-  static TripState get initialState => TripState(
-        isSearching: false,
-        user: null,
-        version: '',
-        error: "",
-        currentTrip: Trip(
-            name: "",
-            id: "",
-            startDate: DateTime.now(),
-            endDate: DateTime.now(),
-            attractionList: [],
-            users: []),
-        list: [],
-      );
+  TripBloc() : super(TripState.initialState);
 
   void updateLoadingState(bool isLoading) {
     emit(state.clone(isSearching: isLoading));
+  }
+
+  void loadAllUsers() async {
+    UserRepository userRepository = UserRepository();
+    final users = await userRepository.getAllUsers();
+    emit(state.clone(users: users));
   }
 
   void setCurrentTrip(Trip? trip) {

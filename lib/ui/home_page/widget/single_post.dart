@@ -206,7 +206,7 @@ class _SinglePostState extends State<SinglePost> {
             ),
             elevation: 10,
             centerTitle: true,
-            title: Text(
+            title: const Text(
               "Trip information",
               style: const TextStyle(
                   color: Colors.white, fontWeight: FontWeight.w500),

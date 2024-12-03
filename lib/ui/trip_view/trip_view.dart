@@ -33,6 +33,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
     super.initState();
     context.read<TripBloc>().setUserDetails();
     context.read<TripBloc>().getAppVersion();
+    context.read<TripBloc>().loadAllUsers();
     context.read<TripBloc>().loadAll();
     context.read<TripBloc>().setCurrentTrip(widget.trip);
   }
@@ -115,7 +116,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
     txt.text = tripData.name;
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext contextNew) {
         return AlertDialog(
           title: const Text('Enter Trip Name'),
@@ -148,7 +149,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
   Future<void> showAccoumadationSelect(AttractionTripModel attraction) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext contextNew) {
         return AlertDialog(
           title: const Text(
@@ -198,7 +199,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
   Future<void> _showDialogSelectDestinations(List<Attraction> list) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext contextNew) {
         return AlertDialog(
           title: const Text('Select Destinations'),
@@ -234,6 +235,57 @@ class _TripViewState extends State<TripView> with RestorationMixin {
             ),
           ],
         );
+      },
+    );
+  }
+
+  Future<void> showDialogBoxShareWithFriends(List<User> users) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext contextNew) {
+        List<String> selectedUsers = [];
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return AlertDialog(
+            title:
+                Text('Select User Name of Your Friends to Invite to Your Trip'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  for (final f in users)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(f.firstName[0].toUpperCase() + f.firstName.substring(1).trim() + " " + f.lastName),
+                        Checkbox(
+                          checkColor: Colors.white,
+                          value: selectedUsers.contains(f.email),
+                          onChanged: (bool? value) {
+                            setState(() {
+                              if (!selectedUsers.contains(f.email)) {
+                                selectedUsers.add(f.email);
+                              } else {
+                                selectedUsers.remove(f.email);
+                              }
+                            });
+                          },
+                        )
+                      ],
+                    )
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Save'),
+                onPressed: () {
+                  Navigator.of(contextNew).pop();
+                },
+              ),
+            ],
+          );
+        });
       },
     );
   }
@@ -297,6 +349,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
     return BlocBuilder<TripBloc, TripState>(buildWhen: (previous, current) {
       return previous.isSearching != current.isSearching ||
           previous.user != current.user ||
+          previous.users != current.users ||
           previous.list != current.list ||
           previous.currentTrip.attractionList.length !=
               current.currentTrip.attractionList.length ||
@@ -329,7 +382,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
         ),
         drawer: DrawerHome(
           version: state.version ?? "",
-          user: state.user ?? User(email: "", firstName: "", lastName: ""),
+          user: state.user ?? User(email: "", firstName: "", lastName: "", id: '', invitations: []),
         ),
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -435,7 +488,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                               {_showDialogSelectDestinations(state.list)}
                           },
                       child: const SizedBox(
-                        width: 200,
+                        width: 250,
                         child: const Text(
                           "Add More Destination",
                           textAlign: TextAlign.center,
@@ -469,7 +522,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                       ),
                       onPressed: () => {addTrip(state.currentTrip)},
                       child: SizedBox(
-                        width: 200,
+                        width: 250,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: (state.isSearching!)
@@ -494,9 +547,10 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                         backgroundColor: StyledColor.ORDER_STATE_BTN_COLOR,
                         elevation: 1.0,
                       ),
-                      onPressed: () => {},
+                      onPressed: () =>
+                          {showDialogBoxShareWithFriends(state.users)},
                       child: const SizedBox(
-                        width: 200,
+                        width: 250,
                         child: Text(
                           "Share with Friends",
                           textAlign: TextAlign.center,

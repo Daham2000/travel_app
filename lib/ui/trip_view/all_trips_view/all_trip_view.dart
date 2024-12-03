@@ -56,7 +56,7 @@ class _ViewAllTripPlanState extends State<ViewAllTripPlan> {
         ),
         drawer: DrawerHome(
           version: state.version ?? "",
-          user: state.user ?? User(email: "", firstName: "", lastName: ""),
+          user: state.user ?? User(email: "", firstName: "", lastName: "", id: '', invitations: []),
         ),
         body: Container(
           margin: const EdgeInsets.symmetric(horizontal: 15.0),

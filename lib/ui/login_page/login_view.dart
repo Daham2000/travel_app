@@ -83,7 +83,7 @@ class _LoginViewState extends State<LoginView> {
       await userRepository.addUser(User(
           email: emailCtrl.value.text,
           firstName: firstNameCtrl.text,
-          lastName: lastNameCtrl.text));
+          lastName: lastNameCtrl.text, id: '', invitations: []));
       Future.microtask(
         () => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => IntroView())),

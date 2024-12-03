@@ -35,6 +35,17 @@ class UserRepository {
     }
   }
 
+  // Future<void> setUserID() async {
+  //   final querySnapshot = await _userCollection.get();
+  //   User u;
+  //
+  //   querySnapshot.docs.forEach((element) {
+  //     u = User.fromMap(element.data() as Map<String, dynamic>);
+  //     u.id = element.id;
+  //     _userCollection.doc(element.id).update(u.toMap());
+  //   });
+  // }
+
   // Delete a user from Firestore
   Future<void> deleteUser(String documentId) async {
     try {
@@ -62,7 +73,12 @@ class UserRepository {
   Future<User> getUserByEmail(String email) async {
     try {
       QuerySnapshot snapshot = await _userCollection.get();
-      return snapshot.docs.where((c) => c["email"].toString().toLowerCase() == (email.toLowerCase())).map((e) => User.fromMap(e.data() as Map<String, dynamic>)).toList()[0];
+      print("Email: " + email);
+      return snapshot.docs
+          .where((c) =>
+              c["email"].toString().toLowerCase() == (email.toLowerCase()))
+          .map((e) => User.fromMap(e.data() as Map<String, dynamic>))
+          .toList()[0];
     } catch (e) {
       print('Error fetching user: $e');
       throw e;
