@@ -383,7 +383,6 @@ class _TripViewState extends State<TripView> with RestorationMixin {
     }, builder: (context, state) {
       return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 100.0,
           flexibleSpace: Image(
             image: AssetImage(ImageAssets.background),
             fit: BoxFit.cover,
@@ -393,18 +392,7 @@ class _TripViewState extends State<TripView> with RestorationMixin {
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
           ),
           centerTitle: true,
-          leading: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 10),
-                child: Image.asset(
-                  ImageAssets.secondLogoPath,
-                  width: 150,
-                ),
-              ),
-            ],
-          ),
+          iconTheme: IconThemeData(color: Colors.white),
         ),
         drawer: DrawerHome(
           version: state.version ?? "",

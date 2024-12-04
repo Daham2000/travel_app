@@ -133,7 +133,7 @@ class DrawerHome extends StatelessWidget {
                     onTap: () {
                       if (currentPage != RouteStrings.allTrip) {
                         Future.microtask(
-                          () => Navigator.push(
+                          () => Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => AllTripProvider())),
