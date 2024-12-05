@@ -9,6 +9,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/db/auth/authentication.dart';
 import 'package:travel_app/db/model/user.dart';
+import 'package:travel_app/ui/invitation_page/invitation_provider.dart';
+import 'package:travel_app/ui/invitation_page/invitation_view.dart';
 import 'package:travel_app/ui/login_page/login_provider.dart';
 import 'package:travel_app/ui/trip_view/all_trips_view/all_trip_provider.dart';
 import 'package:travel_app/ui/trip_view/trip_provider.dart';
@@ -159,8 +161,35 @@ class DrawerHome extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
+                  InkWell(
+                    onTap: () {
+                      if (currentPage != RouteStrings.invitation) {
+                        Future.microtask(
+                              () => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => InvitationProvider())),
+                        );
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15, bottom: 16),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.insert_invitation,
+                            color: Colors.blue,
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            "Invitations",
+                            style: TextStyle(color: Colors.blueAccent),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                   InkWell(
                     onTap: () async {
@@ -177,16 +206,16 @@ class DrawerHome extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 15, bottom: 16),
                       child: Row(
                         children: [
-                          SvgPicture.asset(
-                            ImageAssets.logoutIcon,
-                            width: 20,
+                          Icon(
+                            Icons.arrow_circle_left_sharp,
+                            color: Colors.blue,
                           ),
                           SizedBox(
                             width: 15,
                           ),
                           Text(
                             "Logout",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.blueAccent),
                           )
                         ],
                       ),

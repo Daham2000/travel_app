@@ -31,10 +31,10 @@ class TripRepository {
   }
 
   Future<bool> updateTripPlan(Trip trip) async {
-    try{
+    try {
       final doc = await _tripCollection.doc(trip.id ?? "").update(trip.toMap());
       return true;
-    }catch(e) {
+    } catch (e) {
       print('Error adding user: $e');
       return false;
     }
@@ -45,11 +45,26 @@ class TripRepository {
       final String email = FirebaseAuth.instance.currentUser?.email ?? "";
       QuerySnapshot snapshot = await _tripCollection.get();
       return snapshot.docs
-          .map((doc) => Trip.fromMap(doc.data() as Map<String, dynamic>)).where((c) => c.users.contains(email) && c.endDate.isAfter(DateTime.now()))
+          .map((doc) => Trip.fromMap(doc.data() as Map<String, dynamic>))
+          .where((c) =>
+              c.users.contains(email) && c.endDate.isAfter(DateTime.now()))
           .toList();
     } catch (e) {
       print('Error fetching Trips: $e');
       throw e;
     }
+  }
+
+  Future<Trip?> getTripById(String id) async {
+    try {
+      DocumentSnapshot doc = await _tripCollection.doc(id).get();
+      if (doc.exists) {
+        return Trip.fromMap(doc.data() as Map<String, dynamic>);
+      }
+    } catch (e) {
+      print('Error fetching Trips: $e');
+      throw e;
+    }
+    return null;
   }
 }

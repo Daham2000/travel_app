@@ -41,7 +41,7 @@ class User {
 
 class Invitation {
   final String email;
-  final bool accepted;
+  bool accepted;
 
   Invitation({
     required this.email,

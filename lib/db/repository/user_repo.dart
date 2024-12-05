@@ -74,7 +74,6 @@ class UserRepository {
   Future<User> getUserByEmail(String email) async {
     try {
       QuerySnapshot snapshot = await _userCollection.get();
-      print("Email: " + email);
       return snapshot.docs
           .where((c) =>
               c["email"].toString().toLowerCase() == (email.toLowerCase()))
@@ -110,6 +109,22 @@ class UserRepository {
         }
         await _userCollection.doc(ele.id).update(ele.toMap());
       });
+    } catch (e) {
+      print('Error fetching users: $e');
+      throw e;
+    }
+  }
+
+  Future<void> acceptInvitation(String userID, String tripId) async {
+    try {
+      final User? user = await getUserById(userID);
+      List<Invitation> invitations = user?.invitations ?? [];
+      Invitation tt = invitations.where((t) => t.email == tripId).toList().first;
+      tt.accepted = true;
+      final lis = invitations.where((t) => t.email != tripId).toList();
+      lis.add(tt);
+      user?.invitations = lis;
+      await updateUser(userID, user!);
     } catch (e) {
       print('Error fetching users: $e');
       throw e;

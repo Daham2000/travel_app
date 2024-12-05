@@ -29,7 +29,7 @@ class AttractionTripModel {
 class Trip {
   String name;
   String id;
-  List<dynamic> users;
+  List<String> users;
   DateTime startDate;
   DateTime endDate;
   List<AttractionTripModel> attractionList;
@@ -54,7 +54,7 @@ class Trip {
         endDate: json["endDate"].toDate(),
         attractionList: List<AttractionTripModel>.from(
             json["attractionList"].map((x) => AttractionTripModel.fromJson(x))),
-        users: json["users"],
+        users: List<String>.from(json["users"].map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {
