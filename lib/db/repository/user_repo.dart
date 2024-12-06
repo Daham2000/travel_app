@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:travel_app/db/model/user.dart';
+import 'package:travel_app/db/repository/trip_repo.dart';
 
 class UserRepository {
   static final UserRepository instance = UserRepository._internal();
@@ -119,12 +120,17 @@ class UserRepository {
     try {
       final User? user = await getUserById(userID);
       List<Invitation> invitations = user?.invitations ?? [];
-      Invitation tt = invitations.where((t) => t.email == tripId).toList().first;
+      Invitation tt =
+          invitations.where((t) => t.email == tripId).toList().first;
       tt.accepted = true;
       final lis = invitations.where((t) => t.email != tripId).toList();
       lis.add(tt);
       user?.invitations = lis;
       await updateUser(userID, user!);
+      TripRepository tripRepository = TripRepository();
+      final trip = await tripRepository.getTripById(tripId);
+      trip?.users.add(userID);
+      await tripRepository.updateTripPlan(trip!);
     } catch (e) {
       print('Error fetching users: $e');
       throw e;

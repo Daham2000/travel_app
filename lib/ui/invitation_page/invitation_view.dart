@@ -127,32 +127,35 @@ class _InvitationViewState extends State<InvitationView> {
                       : Column(
                           children: [
                             for (final t in state.user?.invitations ?? [])
-                              InkWell(
-                                  onTap: () => {
-                                        if (!t.accepted)
-                                          _showInvitationDialog(context,
-                                              state.user?.id ?? "", t.email)
-                                      },
-                                  child: TripInvitationCard(
-                                    tripName: _capitalizeFirstLetter(
-                                        stateInvitation.invitationTripPlans
+                              stateInvitation.invitationTripPlans
+                                  .where((tt) => tt.id == t.email).isNotEmpty
+                                  ? InkWell(
+                                      onTap: () => {
+                                            if (!t.accepted)
+                                              _showInvitationDialog(context,
+                                                  state.user?.id ?? "", t.email)
+                                          },
+                                      child: TripInvitationCard(
+                                        tripName: _capitalizeFirstLetter(
+                                            stateInvitation.invitationTripPlans
+                                                .where((tt) => tt.id == t.email)
+                                                .first
+                                                .name),
+                                        numberOfUsers: stateInvitation
+                                            .invitationTripPlans
                                             .where((tt) => tt.id == t.email)
                                             .first
-                                            .name),
-                                    numberOfUsers: stateInvitation
-                                        .invitationTripPlans
-                                        .where((tt) => tt.id == t.email)
-                                        .first
-                                        .users
-                                        .length,
-                                    numberOfPlaces: stateInvitation
-                                        .invitationTripPlans
-                                        .where((tt) => tt.id == t.email)
-                                        .first
-                                        .attractionList
-                                        .length,
-                                    isAccepted: t.accepted,
-                                  )),
+                                            .users
+                                            .length,
+                                        numberOfPlaces: stateInvitation
+                                            .invitationTripPlans
+                                            .where((tt) => tt.id == t.email)
+                                            .first
+                                            .attractionList
+                                            .length,
+                                        isAccepted: t.accepted,
+                                      ))
+                                  : Container()
                           ],
                         );
                 },
