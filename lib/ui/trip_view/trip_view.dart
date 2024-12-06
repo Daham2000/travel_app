@@ -15,6 +15,7 @@ import 'package:travel_app/ui/trip_view/widgets/destination_view.dart';
 import 'package:travel_app/utill/image_assets.dart';
 import 'package:travel_app/utill/route_strings.dart';
 import 'package:travel_app/utill/styled_colors.dart';
+import 'dart:async';
 
 class TripView extends StatefulWidget {
   final bool isEdit;
@@ -242,6 +243,9 @@ class _TripViewState extends State<TripView> with RestorationMixin {
   }
 
   UserRepository userRepository = UserRepository();
+  TextEditingController searchUserCtrl = TextEditingController();
+  Timer? _debounce;
+  List<User> allUsers = [];
 
   Future<void> showDialogBoxShareWithFriends(
       List<User> users, String tripId) async {
@@ -268,6 +272,36 @@ class _TripViewState extends State<TripView> with RestorationMixin {
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
+                  TextField(
+                    onChanged: (e) {
+                      if (_debounce?.isActive ?? false) _debounce?.cancel();
+                      _debounce =
+                          Timer(const Duration(milliseconds: 500), () async {
+                        if (e.isNotEmpty) {
+                          final searchUsers =
+                              await userRepository.searchUsers(e);
+                          if (searchUsers.isNotEmpty) {
+                            setState(() {
+                              users = searchUsers;
+                            });
+                          } else {
+                            setState(() {
+                              users = allUsers;
+                            });
+                          }
+                        } else {
+                          setState(() {
+                            users = allUsers;
+                          });
+                        }
+                      });
+                    },
+                    controller: searchUserCtrl,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Search by name here...',
+                    ),
+                  ),
                   for (final f in users)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -568,10 +602,15 @@ class _TripViewState extends State<TripView> with RestorationMixin {
                         backgroundColor: StyledColor.ORDER_STATE_BTN_COLOR,
                         elevation: 1.0,
                       ),
-                      onPressed: () => {
-                            showDialogBoxShareWithFriends(
-                                state.users, widget.trip?.id ?? "")
-                          },
+                      onPressed: () {
+                        if (allUsers.isEmpty) {
+                          setState(() {
+                            allUsers = state.users;
+                          });
+                        }
+                        showDialogBoxShareWithFriends(
+                            state.users, widget.trip?.id ?? "");
+                      },
                       child: const SizedBox(
                         width: 250,
                         child: Text(

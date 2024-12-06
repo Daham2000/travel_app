@@ -136,4 +136,21 @@ class UserRepository {
       throw e;
     }
   }
+
+  Future<List<User>> searchUsers(String query) async {
+    try {
+      final querySnapshot = await _userCollection
+          .where('firstName', isGreaterThanOrEqualTo: query)
+          .where('firstName', isLessThanOrEqualTo: query + '\uf8ff')
+          .get();
+
+      // Map results to a list
+      return querySnapshot.docs
+          .map((doc) => User.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print("Error during search: $e");
+      return [];
+    }
+  }
 }
