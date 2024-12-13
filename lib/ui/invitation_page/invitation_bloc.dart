@@ -19,12 +19,16 @@ class InvitationBloc extends Cubit<InvitationState> {
     final UserRepository userRepository = UserRepository();
     final userByEmail = await userRepository.getUserByEmail(email ?? "");
     final trips = state.invitationTripPlans;
-    userByEmail.invitations.forEach((invitation) async {
+    // List<Trip> trips = [];
+    for (var invitation in userByEmail.invitations) {
       final Trip? trip = await tripRepository.getTripById(invitation.email);
       if (trip != null) {
         trips.add(trip);
       }
-      emit(state.clone(invitationTripPlans: trips, isSearching: false));
-    });
+      // Optional: you can emit here if you want partial updates for each trip.
+      emit(state.clone(invitationTripPlans: trips));
+    }
+    // Emit final state after processing all invitations.
+    emit(state.clone(invitationTripPlans: trips, isSearching: false));
   }
 }

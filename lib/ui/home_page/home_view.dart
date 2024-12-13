@@ -52,7 +52,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(buildWhen: (previous, current) {
-      return previous.isSearching != current.isSearching ||
+      return previous.isSearching != current.isSearching || previous.user != current.user ||
           previous.attractionList?.length != current.attractionList?.length;
     }, builder: (context, state) {
       return Scaffold(

@@ -44,14 +44,14 @@ class _InvitationViewState extends State<InvitationView> {
       BuildContext context, String userID, String tripId) {
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (contextNew) {
         return AlertDialog(
           title: const Text("Invitation"),
           content: const Text("Do you want to accept this invitation?"),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(contextNew).pop(); // Close the dialog
               },
               child: const Text("Cancel"),
             ),
@@ -59,7 +59,9 @@ class _InvitationViewState extends State<InvitationView> {
               onPressed: () async {
                 // Handle the "Accept" logic here
                 await userRepository.acceptInvitation(userID, tripId);
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(contextNew).pop();
+                context.read<InvitationBloc>().getAllTripInvitationPlans();
+                // Close the dialog
               },
               child: const Text("Accept"),
             ),
@@ -94,11 +96,12 @@ class _InvitationViewState extends State<InvitationView> {
           currentPage: RouteStrings.invitation,
           user: state.user ??
               User(
-                  email: "",
-                  firstName: "",
-                  lastName: "",
-                  id: '',
-                  invitations: []),
+                email: "",
+                firstName: "",
+                lastName: "",
+                id: '',
+                invitations: [],
+              ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -117,47 +120,49 @@ class _InvitationViewState extends State<InvitationView> {
               BlocBuilder<InvitationBloc, InvitationState>(
                 buildWhen: (previous, current) {
                   return previous.isSearching != current.isSearching ||
-                      current.invitationTripPlans !=
-                          previous.invitationTripPlans;
+                      current.invitationTripPlans.length !=
+                          previous.invitationTripPlans.length;
                 },
                 builder:
                     (BuildContext context, InvitationState stateInvitation) {
-                  return stateInvitation.isSearching ?? false
-                      ? Center(child: CircularProgressIndicator())
-                      : Column(
-                          children: [
-                            for (final t in state.user?.invitations ?? [])
-                              stateInvitation.invitationTripPlans
-                                  .where((tt) => tt.id == t.email).isNotEmpty
-                                  ? InkWell(
-                                      onTap: () => {
-                                            if (!t.accepted)
-                                              _showInvitationDialog(context,
-                                                  state.user?.id ?? "", t.email)
-                                          },
-                                      child: TripInvitationCard(
-                                        tripName: _capitalizeFirstLetter(
-                                            stateInvitation.invitationTripPlans
-                                                .where((tt) => tt.id == t.email)
-                                                .first
-                                                .name),
-                                        numberOfUsers: stateInvitation
-                                            .invitationTripPlans
-                                            .where((tt) => tt.id == t.email)
-                                            .first
-                                            .users
-                                            .length,
-                                        numberOfPlaces: stateInvitation
-                                            .invitationTripPlans
-                                            .where((tt) => tt.id == t.email)
-                                            .first
-                                            .attractionList
-                                            .length,
-                                        isAccepted: t.accepted,
-                                      ))
-                                  : Container()
-                          ],
-                        );
+                  return Column(
+                    children: [
+                      for (final Invitation t in state.user?.invitations ?? [])
+                        stateInvitation.invitationTripPlans
+                                .where((tt) => tt.id == t.email)
+                                .isNotEmpty
+                            ? InkWell(
+                                onTap: () => {
+                                      if (!t.accepted)
+                                        _showInvitationDialog(context,
+                                            state.user?.id ?? "", t.email)
+                                    },
+                                child: TripInvitationCard(
+                                  tripName: _capitalizeFirstLetter(
+                                      stateInvitation.invitationTripPlans
+                                          .where((tt) => tt.id == t.email)
+                                          .first
+                                          .name),
+                                  numberOfUsers: stateInvitation
+                                      .invitationTripPlans
+                                      .where((tt) => tt.id == t.email)
+                                      .first
+                                      .users
+                                      .length,
+                                  numberOfPlaces: stateInvitation
+                                      .invitationTripPlans
+                                      .where((tt) => tt.id == t.email)
+                                      .first
+                                      .attractionList
+                                      .length,
+                                  isAccepted: t.accepted,
+                                ))
+                            : Container(),
+                      stateInvitation.isSearching == true
+                          ? Center(child: CircularProgressIndicator())
+                          : Container()
+                    ],
+                  );
                 },
               )
             ],
